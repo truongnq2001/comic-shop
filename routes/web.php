@@ -3,6 +3,7 @@
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,3 +31,4 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middle
 
 //Admin
 Route::get('/admin', [AdminController::class, 'dashboard'])->name('dashboard')->middleware('admin');
+Route::get('/admin/product/create', [ProductController::class, 'index'])->name('createProduct')->middleware('admin');

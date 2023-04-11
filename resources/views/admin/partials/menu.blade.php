@@ -426,7 +426,7 @@
                 <li>
                     <a href="calendar.html" class=" waves-effect">
                         <i class="ri-calendar-2-line"></i>
-                        <span>Calendar</span>
+                        <span>Sản phẩm</span>
                     </a>
                 </li>
     
