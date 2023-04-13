@@ -9,13 +9,13 @@ class ProductController extends Controller
     //display product table
     public function index()
     {
-        return view('admin.createProduct');
+        return view('admin.product.showProduct');
     }
 
     //create
     public function create()
     {
-        return "product";
+        return view('admin.product.createProduct');
     }
 
     //save

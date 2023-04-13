@@ -94,12 +94,13 @@
                     <li class="dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Thể loại <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                         <ul class="dropdown-menu">
-                            <li><a href="shop.html">Trinh thám</a></li>
+                            <li><a href="shop.html">Cổ trang</a></li>
                             <li><a href="shop-detail.html">Thiếu nhi</a></li>
-                            <li><a href="cart.html">Phiêu lưu</a></li>
-                            <li><a href="checkout.html">Thể thao</a></li>
+                            <li><a href="cart.html">Thể thao</a></li>
+                            <li><a href="checkout.html">Thần đồng đất việt</a></li>
                             <li><a href="my-account.html">Conan</a></li>
                             <li><a href="wishlist.html">Doraemon</a></li>
+                            <li><a href="wishlist.html">Khác</a></li>
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>

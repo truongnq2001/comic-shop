@@ -5,19 +5,19 @@
             <div class="navbar-brand-box">
                 <a href="index.html" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="logo-sm" height="22">
+                        <img src="/assets/images/logo-sm.png" alt="logo-sm" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-dark.png" alt="logo-dark" height="20">
+                        <img src="/assets/images/logo-dark.png" alt="logo-dark" height="20">
                     </span>
                 </a>
 
                 <a href="index.html" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="logo-sm-light" height="22">
+                        <img src="/assets/images/logo-sm.png" alt="logo-sm-light" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="images/admin-logo.png" alt="logo-light" height="60">
+                        <img src="/images/admin-logo.png" alt="logo-light" height="60">
                     </span>
                 </a>
             </div>
@@ -368,7 +368,7 @@
             <div class="dropdown d-inline-block user-dropdown">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="images/user-avatar.png"
+                    <img class="rounded-circle header-profile-user" src="/images/user-avatar.png"
                         alt="Header Avatar">
                     <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->name }}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
@@ -384,11 +384,11 @@
                 </div>
             </div>
 
-            <div class="dropdown d-inline-block">
+            {{-- <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
                     <i class="ri-settings-2-line"></i>
                 </button>
-            </div>
+            </div> --}}
 
         </div>
     </div>
@@ -402,7 +402,7 @@
         <!-- User details -->
         <div class="user-profile text-center mt-3">
             <div class="">
-                <img src="images/user-avatar.png" alt="" class="avatar-md rounded-circle">
+                <img src="/images/user-avatar.png" alt="" class="avatar-md rounded-circle">
             </div>
             <div class="mt-3">
                 <h4 class="font-size-16 mb-1">{{ Auth::user()->name }}</h4>
@@ -417,22 +417,33 @@
                 <li class="menu-title">Menu</li>
 
                 <li>
-                    <a href="index.html" class="waves-effect">
+                    <a href="{{ asset('admin') }}" class="waves-effect">
                         <i class="ri-dashboard-line"></i><span class="badge rounded-pill bg-success float-end">3</span>
                         <span>Dashboard</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="calendar.html" class=" waves-effect">
-                        <i class="ri-calendar-2-line"></i>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-book-read-line"></i>
                         <span>Sản phẩm</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{ asset('admin/product') }}">Danh sách sản phẩm</a></li>
+                        <li><a href="{{ asset('admin/product/create') }}">Tạo sản phẩm</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{{ asset('admin/category') }}" class=" waves-effect">
+                        <i class="ri-bar-chart-horizontal-fill"></i>
+                        <span>Danh mục</span>
                     </a>
                 </li>
     
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="ri-mail-send-line"></i>
+                        <i class="ri-bar-chart-horizontal-fill"></i>
                         <span>Email</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">

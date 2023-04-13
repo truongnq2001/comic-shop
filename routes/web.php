@@ -30,5 +30,18 @@ Route::post('/login', [AuthController::class, 'postLogin'])->name('login')->midd
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 //Admin
-Route::get('/admin', [AdminController::class, 'dashboard'])->name('dashboard')->middleware('admin');
-Route::get('/admin/product/create', [ProductController::class, 'index'])->name('createProduct')->middleware('admin');
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
+    
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    //product
+    Route::group(['prefix' => 'product', 'middleware' => 'admin'], function(){
+        Route::get('/', [ProductController::class, 'index'])->name('admin.product.show');
+        Route::get('/create', [ProductController::class, 'create'])->name('admin.product.create');
+    });
+    //category
+    Route::group(['prefix' => 'category', 'middleware' => 'admin'], function(){
+        Route::get('/', [CategoryController::class, 'index'])->name('admin.category.show');
+        Route::get('/create', [ProductController::class, 'create'])->name('admin.product.create');
+    });
+});
+
