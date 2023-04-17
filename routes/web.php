@@ -4,6 +4,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,14 +35,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
     
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     //product
-    Route::group(['prefix' => 'product', 'middleware' => 'admin'], function(){
+    Route::group(['prefix' => 'product'], function(){
         Route::get('/', [ProductController::class, 'index'])->name('admin.product.show');
         Route::get('/create', [ProductController::class, 'create'])->name('admin.product.create');
+        Route::post('/create', [ProductController::class, 'store'])->name('admin.product.store');
     });
     //category
-    Route::group(['prefix' => 'category', 'middleware' => 'admin'], function(){
+    Route::group(['prefix' => 'category'], function(){
         Route::get('/', [CategoryController::class, 'index'])->name('admin.category.show');
-        Route::get('/create', [ProductController::class, 'create'])->name('admin.product.create');
+        Route::post('/create', [CategoryController::class, 'store'])->name('admin.category.store');
+        Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
     });
 });
 

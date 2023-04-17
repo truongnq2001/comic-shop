@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Category;
 
 use Illuminate\Http\Request;
 
@@ -15,13 +16,15 @@ class ProductController extends Controller
     //create
     public function create()
     {
-        return view('admin.product.createProduct');
+        return view('admin.product.createProduct',[
+            'categories' => Category::all(),
+        ]);
     }
 
     //save
-    public function store()
+    public function store(Request $request)
     {
-        return "product";
+        dd($request->all());
     }
 
     //edit

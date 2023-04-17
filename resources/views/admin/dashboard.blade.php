@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesdesign" name="author" />
+
         <!-- App favicon -->
         <link rel="shortcut icon" href="/images/logo-comic.png">
 
@@ -28,6 +29,8 @@
         <link href="{{ asset('/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- Responsive Table css -->
         <link href="{{ asset('/assets/libs/admin-resources/rwd-table/rwd-table.min.css') }}" rel="stylesheet" type="text/css" />
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     </head>
 
@@ -51,39 +54,39 @@
         <div class="rightbar-overlay"></div>
 
         <!-- JAVASCRIPT -->
-        <script src="{{ asset('/assets/libs/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('/assets/libs/metismenu/metisMenu.min.js') }}"></script>
-        <script src="{{ asset('/assets/libs/simplebar/simplebar.min.js') }}"></script>
-        <script src="{{ asset('/assets/libs/node-waves/waves.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/metismenu/metisMenu.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
 
         <!-- apexcharts -->
-        <script src="{{ asset('/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
 
         <!-- jquery.vectormap map -->
-        <script src="{{ asset('/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
-        <script src="{{ asset('/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js') }}"></script>
+        <script src="{{ asset('assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js') }}"></script>
 
         <!-- Required datatable js -->
-        <script src="{{ asset('/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
         
         <!-- Responsive examples -->
-        <script src="{{ asset('/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
-        <script src="{{ asset('/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
 
-        <script src="{{ asset('/assets/js/pages/dashboard.init.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/dashboard.init.js') }}"></script>
 
-        <script src="{{ asset('/assets/js/app.js') }}"></script>
+        <script src="{{ asset('assets/js/app.js') }}"></script>
 
-        <script src="{{ asset('/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 
-        <script src="{{ asset('/assets/js/pages/form-element.init.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/form-element.init.js') }}"></script>
 
         <!-- Responsive Table js -->
-        <script src="{{ asset('/assets/libs/admin-resources/rwd-table/rwd-table.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/admin-resources/rwd-table/rwd-table.min.js') }}"></script>
 
-        <script src="{{ asset('/assets/js/pages/table-responsive.init.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/table-responsive.init.js') }}"></script>
 
     </body>
 </html>
