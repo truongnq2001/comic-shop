@@ -39,6 +39,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
         Route::get('/', [ProductController::class, 'index'])->name('admin.product.show');
         Route::get('/create', [ProductController::class, 'create'])->name('admin.product.create');
         Route::post('/create', [ProductController::class, 'store'])->name('admin.product.store');
+        Route::delete('/{id}', [ProductController::class, 'destroy'])->name('admin.product.destroy');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
+        Route::put('/edit/{id}', [ProductController::class, 'update'])->name('admin.product.update');
     });
     //category
     Route::group(['prefix' => 'category'], function(){

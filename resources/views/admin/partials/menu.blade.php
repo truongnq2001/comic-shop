@@ -29,7 +29,7 @@
             <!-- App Search-->
             <form class="app-search d-none d-lg-block">
                 <div class="position-relative">
-                    <input type="text" class="form-control" placeholder="Search...">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm...">
                     <span class="ri-search-line"></span>
                 </div>
             </form>
@@ -227,26 +227,15 @@
                     <div class="px-lg-2">
                         <div class="row g-0">
                             <div class="col">
-                                <a class="dropdown-icon-item" href="#">
-                                    <img src="assets/images/brands/github.png" alt="Github">
-                                    <span>GitHub</span>
+                                <a class="dropdown-icon-item" href="/">
+                                    <img src="/images/logo-comic.png" alt="Comic Shop">
+                                    <span>Comic Shop</span>
                                 </a>
                             </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item" href="#">
-                                    <img src="assets/images/brands/bitbucket.png" alt="bitbucket">
-                                    <span>Bitbucket</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item" href="#">
-                                    <img src="assets/images/brands/dribbble.png" alt="dribbble">
-                                    <span>Dribbble</span>
-                                </a>
-                            </div>
+                        
                         </div>
 
-                        <div class="row g-0">
+                        {{-- <div class="row g-0">
                             <div class="col">
                                 <a class="dropdown-icon-item" href="#">
                                     <img src="assets/images/brands/dropbox.png" alt="dropbox">
@@ -265,7 +254,7 @@
                                     <span>Slack</span>
                                 </a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -443,8 +432,8 @@
     
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="ri-bar-chart-horizontal-fill"></i>
-                        <span>Email</span>
+                        <i class="ri-account-box-line"></i>
+                        <span>Người dùng</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="email-inbox.html">Inbox</a></li>

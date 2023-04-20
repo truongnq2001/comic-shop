@@ -103,7 +103,7 @@
                             <li><a href="wishlist.html">Khác</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gallery.html">Mục yêu thích</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact-us.html">Liên hệ</a></li>
                 </ul>
             </div>

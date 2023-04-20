@@ -94,7 +94,7 @@
                                             },
                                             error: function(response) {
                                                 // delete fail
-                                                console.log(response);
+                                                // console.log(response);
                                                 alert(response.responseJSON.message);
                                             }
                                         });
