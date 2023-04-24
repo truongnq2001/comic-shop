@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Trang chu')
+@section('title', 'Trang chủ - Comic Shop')
 @section('content')
     <!-- Start Slider -->
     <div id="slides-shop" class="cover-slides">
@@ -98,16 +98,74 @@
                             <img src="{{ $item->image }}" class="img-fluid imgProduct" alt="Image">
                             <div class="mask-icon">
                                 <ul>
-                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Chi tiết"><i class="fas fa-eye"></i></a></li>
+                                    <li>
+                                        <a href="{{ route('product', ['id' => $item->id]) }}" data-toggle="tooltip" data-placement="right" title="Chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </li>
                                     <li><a href="#" data-toggle="tooltip" data-placement="right" title="Thêm vào yêu thích"><i class="far fa-heart"></i></a></li>
                                 </ul>
-                                <a class="cart" href="#">Thêm vào giỏ hàng</a>
+                                @auth
+                                    <a class="cart" onclick="addCart({{ $item->id }})" style="cursor: pointer;">Thêm vào giỏ hàng</a>
+                                @else
+                                    <a class="cart" onclick="alert('Vui lòng đăng nhập để mua hàng!')" style="cursor: pointer;">Thêm vào giỏ hàng</a>
+                                @endauth
                             </div>
                         </div>
                         <div class="why-text">
-                            <a href=""><h4 style="text-transform: uppercase;"> {{ $item->title }}</h4></a>
+                            <a href="{{route('product', ['id' => $item->id]) }}"><h4 style="text-transform: uppercase;"> {{ $item->title }}</h4></a>
                             <h5>{{ number_format($item->price, 0, ',', ',')}} VNĐ</h5> 
                         </div>
+                        <script>
+                        function addCart(productId){
+                            $.ajax({
+                                url: "/cart/add",
+                                type: "POST",
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    "productId": productId,
+                                    "quantity": 1,
+                                },
+                                success: function(response){
+                                    if(response.status === "success"){
+                                        // alert(response.message);
+                                        var sessionArray = response.session;
+                                        var cart = '';
+                                        var totalMoney = 0;
+                                        for (var i = 0; i < sessionArray.length; i++) {
+                                            cart += `<li>
+                                                        <a href="#" style="height: 70px;" class="photo">
+                                                            <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
+                                                            </a>
+                                                        <div style="display: table;">
+                                                            <h6>
+                                                                <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
+                                                                </h6>
+                                                            <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
+                                                                <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
+                                                                    <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
+                                                                </a>
+                                                            </p>
+                                                        </div>
+                                                    </li>`;
+                                             totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
+                                        }
+                                        $('#cartBox').html(cart);
+                                        $('#cartBox').append(`<li class="total">
+                                                                <a href="#" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
+                                                                <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
+                                                            </li>`);
+                                        $('#totalCart').html(sessionArray.length);
+                                    }
+                                },
+                                error: function(response){
+                                    if (response.status === 'error') {
+                                        alert(response.message)
+                                    }
+                                },                            
+                            });
+                        }   
+                        </script>
                     </div>
                 </div> 
                 @endforeach

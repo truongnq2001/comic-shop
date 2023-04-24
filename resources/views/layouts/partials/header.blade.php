@@ -82,7 +82,7 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa fa-bars"></i>
             </button>
-                <a class="navbar-brand" href="index.html"><img src="images/logo-comic-long.png" style="width: 60%;" class="logo" alt=""></a>
+                <a class="navbar-brand" href="/"><img src="{{ asset('images/logo-comic-long.png') }}" style="width: 60%;" class="logo" alt=""></a>
             </div>
             <!-- End Header Navigation -->
 
@@ -116,7 +116,13 @@
                     <li class="side-menu">
                         <a href="#">
                             <i class="fa fa-shopping-bag"></i>
-                            <span class="badge">3</span>
+                            <span class="badge" id="totalCart">
+                            @if (session()->has('cart'))
+                                {{ count(session('cart')) }}
+                            @else
+                                {{ 0 }}
+                            @endif
+                            </span>
                             <p>Giỏ hàng</p>
                         </a>
                     </li>
@@ -128,28 +134,97 @@
         <div class="side">
             <a href="#" class="close-side"><i class="fa fa-times"></i></a>
             <li class="cart-box">
-                <ul class="cart-list">
-                    <li>
-                        <a href="#" class="photo"><img src="images/img-pro-01.jpg" class="cart-thumb" alt="" /></a>
-                        <h6><a href="#">Conan tập 7 </a></h6>
-                        <p>1x - <span class="price">20.000 VNĐ</span></p>
-                    </li>
-                    <li>
-                        <a href="#" class="photo"><img src="images/img-pro-02.jpg" class="cart-thumb" alt="" /></a>
-                        <h6><a href="#">Doraemon - Cuộc phiêu lưu vào thiên hà</a></h6>
-                        <p>1x - <span class="price">24.000 VNĐ</span></p>
-                    </li>
-                    <li>
-                        <a href="#" class="photo"><img src="images/img-pro-03.jpg" class="cart-thumb" alt="" /></a>
-                        <h6><a href="#">Conan đặc biệt - Điều kì lạ ở phòng 205</a></h6>
-                        <p>1x - <span class="price">33.000 VNĐ</span></p>
-                    </li>
+                <?php 
+                    $totalMoney = 0;
+                ?>
+                <ul class="cart-list" id="cartBox">
+                    @if (session()->has('cart'))
+                        @foreach (session('cart') as $item)
+                        <li>
+                            <a href="{{ route('product', ['id' => $item['product']->id]) }}" style="height: 70px;" class="photo">
+                                <img src="{{ $item['product']->image }}" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
+                            </a>
+                            <div style="display: table;">
+                                <h6>
+                                    <a href="{{ route('product', ['id' => $item['product']->id]) }}">{{ $item['product']->title }}</a>
+                                </h6>
+                                <p>{{ $item['quantity'] }}x <span class="price">{{ $item['product']->price }} VNĐ</span> 
+                                    <a style="cursor: pointer" id="deleteCart" onclick="deleteCart({{ $item['product']->id }})">
+                                        <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </li>
+                        <?php 
+                            $totalMoney += $item['product']->price*$item['quantity'];
+                        ?>
+                        @endforeach                       
+                    @else
+                        <p style="text-align: center" id="emptyCart">Chưa có sản phẩm nào</p>
+                    @endif
                     <li class="total">
                         <a href="#" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
-                        <span class="float-right"><strong>Tổng</strong>: 77.000 VNĐ</span>
+                        <span class="float-right"><strong>Tổng</strong>: {{ $totalMoney }} VNĐ</span>
                     </li>
                 </ul>
             </li>
+            <style>
+                a#deleteCart:focus{
+                    color: #b0b435;
+                }
+                a#deleteCart:hover{
+                    color: #b0b435;
+                }
+            </style>
+            <script>
+            function deleteCart(productId){
+                $.ajax({
+                    url: "/cart/delete",
+                    type: "DELETE",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "productId": productId,
+                    },
+                    success: function(response){
+                        if(response.status === "success"){
+                            var sessionArray = response.session;
+                            var cart = '';
+                            var totalMoney = 0;
+                            for (var i = 0; i < sessionArray.length; i++) {
+                                cart += `<li>
+                                            <a href="#" style="height: 70px;" class="photo">
+                                                <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
+                                                </a>
+                                            <div style="display: table;">
+                                                <h6>
+                                                    <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
+                                                    </h6>
+                                                <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
+                                                    <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
+                                                        <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </li>`;
+                                    totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
+                            }
+                            $('#cartBox').html(cart);
+                            $('#cartBox').append(`<li class="total">
+                                                    <a href="#" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
+                                                    <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
+                                                </li>`);
+                            $('#totalCart').html(sessionArray.length);
+                            $('#emptyCart').html('Chưa có sản phẩm nào');
+                        }
+                    },
+                    error: function(response){
+                        if (response.status === 'error') {
+                            // alert(response.message)
+                        }
+                    },        
+                });
+            }
+            </script>
         </div>
         <!-- End Side Menu -->
     </nav>

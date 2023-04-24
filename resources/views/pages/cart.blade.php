@@ -49,7 +49,29 @@
                                     <td class="price-pr">
                                         <p>$ 80.0</p>
                                     </td>
-                                    <td class="quantity-box"><input type="number" size="4" value="1" min="0" step="1" class="c-input-text qty text"></td>
+                                    <td>
+                                        <div class="input-group quantity mr-3" style="width: 130px; margin-bottom: 30px;">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary btn-minus changeQuantity" style="background: #b0b435; border-radius: 0px; border: none;">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input id="myInput" type="text" style="background: #ebebeb;" class="form-control border-0 text-center" value="1">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary btn-plus changeQuantity" style="background: #b0b435; border-radius: 0px; border: none;">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                            <style>
+                                            button.changeQuantity:focus{
+                                                box-shadow: none;
+                                            }
+                                            input#myInput{
+                                                box-shadow: none;
+                                            }
+                                            </style>
+                                        </div>
+                                    </td>
                                     <td class="total-pr">
                                         <p>$ 80.0</p>
                                     </td>

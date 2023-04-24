@@ -16,8 +16,8 @@
     <meta name="author" content="">
 
     <!-- Site Icons -->
-    <link rel="shortcut icon" href="images/logo-comic.png" type="image/x-icon">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="{{ asset('images/logo-comic.png') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
@@ -47,14 +47,14 @@
 <script src="{{ asset('js/jquery.superslides.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap-select.js') }}"></script>
 <script src="{{ asset('js/inewsticker.js') }}"></script>
-<script src="js/bootsnav.js"></script>
-<script src="js/images-loded.min.js"></script>
-<script src="js/isotope.min.js"></script>
-<script src="js/owl.carousel.min.js"></script>
-<script src="js/baguetteBox.min.js"></script>
-<script src="js/form-validator.min.js"></script>
-<script src="js/contact-form-script.js"></script>
-<script src="js/custom.js"></script>
+<script src="{{ asset('js/bootsnav.js') }}"></script>
+<script src="{{ asset('js/images-loded.min.js') }}"></script>
+<script src="{{ asset('js/isotope.min.js') }}"></script>
+<script src="{{ asset('js/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('js/baguetteBox.min.js') }}"></script>
+<script src="{{ asset('js/form-validator.min.js') }}"></script>
+<script src="{{ asset('js/contact-form-script.js') }}"></script>
+<script src="{{ asset('js/custom.js') }}"></script>
 </body>
 
 </html>

@@ -206,7 +206,7 @@
                                     success: function(response) {
                                         // delete success
                                         if (response.status === 'success') {
-                                            alert(response.message)
+                                            // alert(response.message)
                                             showListCategory(response.categories);
                                             refreshInput();
                                         }

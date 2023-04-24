@@ -18,5 +18,13 @@ class PagesController extends Controller
     {
         return view('pages/cart');
     }
+
+    public function product(int $id)
+    {
+
+        return view('pages/detail', [
+            'product' => Product::find($id),
+        ]);
+    }
     
 }

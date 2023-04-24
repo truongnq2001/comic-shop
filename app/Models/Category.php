@@ -13,7 +13,9 @@ class Category extends Model
 
     protected $table = 'categories';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+    ];
 
     public function getTotalProducts()
     {

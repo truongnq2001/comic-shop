@@ -1,11 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\Product\ProductStoreRequest;
+use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -26,23 +30,8 @@ class ProductController extends Controller
     }
 
     //save
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        $request->validate([
-            'title' => 'required|max:255',
-            'ibsn_code' => 'required',
-            'author' => 'required|max:255',
-            'category_id' => 'required',
-            'age' => 'required',
-            'price' => 'required',
-            'size' => 'required',
-            'number_of_pages' => 'required',
-            'format' => 'required',
-            'weight' => 'required',
-            'image' => 'required',
-            'description' => 'required',
-        ]);
-
         $imageURL = '';
 
         if ($request->hasFile('image')) {
@@ -82,23 +71,8 @@ class ProductController extends Controller
     }
 
     //update
-    public function update(Request $request, int $id)
+    public function update(ProductUpdateRequest $request, int $id)
     {
-        $request->validate([
-            'title' => 'required|max:255',
-            'ibsn_code' => 'required',
-            'author' => 'required|max:255',
-            'category_id' => 'required',
-            'age' => 'required',
-            'price' => 'required',
-            'size' => 'required',
-            'number_of_pages' => 'required',
-            'format' => 'required',
-            'weight' => 'required',
-            'urlImageHidden' => 'required',
-            'description' => 'required',
-        ]);
-
         $imageURL = '';
 
         //check $request->image không có giá trị thì sẽ nhận $request->urlImageHidden
@@ -108,6 +82,8 @@ class ProductController extends Controller
 
             $imageName = 'images/' . time() . rand(0,9999) . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->storeAs('public', $imageName);
+            microtime();
+            Str::uuid();
 
             $imageURL = Storage::url($imageName);
         }else if($request->image != ''){

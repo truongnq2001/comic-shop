@@ -12,7 +12,20 @@ class Product extends Model
 
     protected $table = 'products';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'ibsn_code',
+        'author',
+        'category_id',
+        'age',
+        'price',
+        'size',
+        'number_of_pages',
+        'format',
+        'weight',
+        'image',
+        'description',
+    ];
 
     public function category()
     {
