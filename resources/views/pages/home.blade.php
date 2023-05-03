@@ -93,7 +93,7 @@
                     <div class="products-single fix">
                         <div class="box-img-hover">
                             <div class="type-lb">
-                                <p class="sale">Sale</p>
+                                <p class="sale">New</p>
                             </div>
                             <img src="{{ $item->image }}" class="img-fluid imgProduct" alt="Image">
                             <div class="mask-icon">

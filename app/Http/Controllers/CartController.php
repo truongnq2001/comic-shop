@@ -14,6 +14,12 @@ class CartController extends Controller
         return view('pages/cart');
     }
 
+    //show checkout
+    public function showCheckout()
+    {
+        return view('pages/checkout');
+    }
+
     //add cart
     public function addCart(Request $request)
     {
@@ -31,7 +37,7 @@ class CartController extends Controller
             foreach ($cart as $key => $value) {
                 if ($cart[$key]['id'] == $id) {
                     $check = true;
-                    $cart[$key]['quantity']++;
+                    $cart[$key]['quantity'] += $request->quantity;
                     break;
                 }
             }
@@ -49,6 +55,32 @@ class CartController extends Controller
             'status' => 'success',
             'message' => 'Thêm sản phẩm vào giỏ hàng thành công!',
             'session' => session('cart'),
+        ]);
+    }
+
+    //update cart
+    public function updateCart(Request $request)
+    {
+        $id = $request->productId;
+        $quantity = $request->quantity;
+
+        if (session()->has('cart')) {
+            $cart = session()->get('cart');
+            $check = false;
+            foreach ($cart as $key => $value) {
+                if ($cart[$key]['id'] == $id) {
+                    $check = true;
+                    $cart[$key]['quantity'] = $quantity;
+                    break;
+                }
+            }
+        }
+
+        session()->put('cart', $cart);
+
+        return Response::json([
+            'status' => 'success',
+            'message' => 'Cập nhật sản phẩm trong giỏ hàng thành công!',
         ]);
     }
 

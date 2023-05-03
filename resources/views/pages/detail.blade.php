@@ -54,13 +54,13 @@
 						
                         <div class="input-group quantity mr-3" style="width: 130px; margin-bottom: 30px;">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary btn-minus changeQuantity" style="background: #b0b435; border-radius: 0px; border: none;">
+                                <button class="btn btn-primary btn-minus changeQuantity" id="minusQuantity" onclick="minus({{ $product->id }})" style="background: #b0b435; border-radius: 0px; border: none;">
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input id="myInput" type="text" style="background: #ebebeb;" class="form-control border-0 text-center" value="1">
+                            <input id="quantityInput{{ $product->id }}" type="text" style="background: #ebebeb;" class="form-control border-0 text-center" value="1">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary btn-plus changeQuantity" style="background: #b0b435; border-radius: 0px; border: none;">
+                                <button class="btn btn-primary btn-plus changeQuantity" id="plusQuantity" onclick="plus({{ $product->id }})" style="background: #b0b435; border-radius: 0px; border: none;">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
@@ -76,10 +76,101 @@
 
 						<div class="price-box-bar">
 							<div class="cart-and-bay-btn">
-								<a class="btn hvr-hover" data-fancybox-close="" href="#">Mua ngay</a>
-								<a class="btn hvr-hover" data-fancybox-close="" href="#">Thêm vào giỏ hàng</a>
+								<a class="btn hvr-hover" onclick="buyNow({{ $product->id }})" data-fancybox-close="" href="{{ route('cart') }}">Mua ngay</a>
+								<a class="btn hvr-hover" onclick="addNumCart({{ $product->id }})" data-fancybox-close="" href="#">Thêm vào giỏ hàng</a>
 							</div>
 						</div>
+
+                        <script>
+                        function minus(productId){
+                            var currentValue = $('#quantityInput' + productId).val();
+                            var intValue = parseInt(currentValue);
+
+                            intValue = intValue - 1;
+                            if(intValue < 1){
+                                intValue = 1;
+                            }
+
+                            $('#quantityInput' + productId).val(intValue);
+                        }    
+                        function plus(productId){
+                            var currentValue = $('#quantityInput' + productId).val();
+                            var intValue = parseInt(currentValue);
+
+                            intValue = intValue + 1;
+
+                            $('#quantityInput' + productId).val(intValue);
+                        }  
+                        function buyNow(productId){
+                            $.ajax({
+                                url: "/cart/add",
+                                type: "POST",
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    "productId": productId,
+                                    "quantity": 1,
+                                },
+                                success: function(response){
+                                    if(response.status === "success"){
+                                    }
+                                },
+                                error: function(response){
+                                    if (response.status === 'error') {
+                                        // alert(response.message)
+                                    }
+                                }, 
+                            });    
+                        } 
+                        function addNumCart(productId){
+                            var quantity = $('#quantityInput' + productId).val();
+                            $.ajax({
+                                url: "/cart/add",
+                                type: "POST",
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    "productId": productId,
+                                    "quantity": quantity,
+                                },
+                                success: function(response){
+                                    if(response.status === "success"){
+                                        var sessionArray = response.session;
+                                        var cart = '';
+                                        var totalMoney = 0;
+                                        for (var i = 0; i < sessionArray.length; i++) {
+                                            cart += `<li>
+                                                        <a href="#" style="height: 70px;" class="photo">
+                                                            <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
+                                                            </a>
+                                                        <div style="display: table;">
+                                                            <h6>
+                                                                <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
+                                                                </h6>
+                                                            <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
+                                                                <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
+                                                                    <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
+                                                                </a>
+                                                            </p>
+                                                        </div>
+                                                    </li>`;
+                                             totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
+                                        }
+                                        $('#cartBox').html(cart);
+                                        $('#cartBox').append(`<li class="total">
+                                                                <a href="#" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
+                                                                <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
+                                                            </li>`);
+                                        $('#totalCart').html(sessionArray.length);
+                                        alert('Lưu giỏ hàng thành công!');
+                                    }
+                                },
+                                error: function(response){
+                                    if (response.status === 'error') {
+                                        // alert(response.message)
+                                    }
+                                }, 
+                            });    
+                        }   
+                        </script>
 
 						<div class="add-to-btn">
 							<div class="add-comp">
@@ -99,19 +190,29 @@
             <div class="row" style="margin-top: 50px;">
                 <div class="descriptionContainer">
                     <h2 style="font-weight: bold;">Mô tả:</h2>
-                    <p>{{ $product->description }}</p>
+                    <p style="font-size: 16px;">{{ $product->description }}</p>
                 </div>
             </div>
 			
 			<div class="row my-5">
-				<div class="card card-outline-secondary my-4">
+				<div class="card card-outline-secondary my-4 col-12">
 					<div class="card-header">
-						<h2>Product Reviews</h2>
+						<h2>Bình luận về sản phẩm</h2>
 					</div>
 					<div class="card-body">
 						<div class="media mb-3">
 							<div class="mr-2"> 
-								<img class="rounded-circle border p-1" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2264%22%20height%3D%2264%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_160c142c97c%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_160c142c97c%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2213.5546875%22%20y%3D%2236.5%22%3E64x64%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Generic placeholder image">
+								<img class="rounded-circle border p-1" src="/images/user-avatar.png" style="width: 70px;" alt="Generic placeholder image">
+							</div>
+							<div class="media-body">
+								<p style="font-size: 16px;">Truyện rất hay, mọi người nên mua nhé.</p>
+								<p class="text-muted" style="font-size: 13px;">Đăng bởi Nguyen Van A vào lúc 11:43:34 28/4/2023</p>
+							</div>
+						</div>
+						<hr>
+						{{-- <div class="media mb-3">
+							<div class="mr-2"> 
+								<img class="rounded-circle border p-1" src="/images/user-avatar.png" style="width: 70px;" alt="Generic placeholder image">
 							</div>
 							<div class="media-body">
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
@@ -121,25 +222,19 @@
 						<hr>
 						<div class="media mb-3">
 							<div class="mr-2"> 
-								<img class="rounded-circle border p-1" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2264%22%20height%3D%2264%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_160c142c97c%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_160c142c97c%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2213.5546875%22%20y%3D%2236.5%22%3E64x64%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Generic placeholder image">
+								<img class="rounded-circle border p-1" src="/images/user-avatar.png" style="width: 70px;" alt="Generic placeholder image">
 							</div>
 							<div class="media-body">
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
 								<small class="text-muted">Posted by Anonymous on 3/1/18</small>
 							</div>
 						</div>
-						<hr>
-						<div class="media mb-3">
-							<div class="mr-2"> 
-								<img class="rounded-circle border p-1" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2264%22%20height%3D%2264%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_160c142c97c%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_160c142c97c%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2213.5546875%22%20y%3D%2236.5%22%3E64x64%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Generic placeholder image">
-							</div>
-							<div class="media-body">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-								<small class="text-muted">Posted by Anonymous on 3/1/18</small>
-							</div>
-						</div>
-						<hr>
-						<a href="#" class="btn hvr-hover">Leave a Review</a>
+						<hr> --}}
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Nội dung</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+						<a href="#" class="btn hvr-hover">Bình luận</a>
 					</div>
 				  </div>
 			</div>
@@ -147,30 +242,26 @@
             <div class="row my-5">
                 <div class="col-lg-12">
                     <div class="title-all text-center">
-                        <h1>Featured Products</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+                        <h1>Bạn có thể thích</h1>
                     </div>
                     <div class="featured-products-box owl-carousel owl-theme">
+                        @foreach ($relatedProducts as $item)
                         <div class="item">
                             <div class="products-single fix">
                                 <div class="box-img-hover">
-                                    <img src="images/img-pro-01.jpg" class="img-fluid" alt="Image">
-                                    <div class="mask-icon">
-                                        <ul>
-                                            <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
-                                            <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
-                                            <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
-                                        </ul>
-                                        <a class="cart" href="#">Add to Cart</a>
-                                    </div>
+                                    <a href="{{ route('product', ['id' => $item->id]) }}">
+                                        <img src="{{ $item->image }}" class="img-fluid" alt="Image" style="height: 355px; width: 255px; object-fit: cover;">
+                                    </a>
                                 </div>
                                 <div class="why-text">
-                                    <h4>Lorem ipsum dolor sit amet</h4>
-                                    <h5> $9.79</h5>
+                                    <a href="{{ route('product', ['id' => $item->id]) }}"><h4>{{ $item->title }}</h4></a>
+                                    <h5> {{ number_format($item->price, 0, ',', ',')}} VNĐ</h5>
                                 </div>
                             </div>
                         </div>
-                        <div class="item">
+                        @endforeach
+                        
+                        {{-- <div class="item">
                             <div class="products-single fix">
                                 <div class="box-img-hover">
                                     <img src="images/img-pro-02.jpg" class="img-fluid" alt="Image">
@@ -302,7 +393,7 @@
                                     <h5> $9.79</h5>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -311,90 +402,5 @@
     </div>
     <!-- End Cart -->
 
-    <!-- Start Instagram Feed  -->
-    <div class="instagram-box">
-        <div class="main-instagram owl-carousel owl-theme">
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-01.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-02.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-03.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-04.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-05.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-06.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-07.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-08.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-09.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="images/instagram-img-05.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Instagram Feed  -->
+    
 @endsection

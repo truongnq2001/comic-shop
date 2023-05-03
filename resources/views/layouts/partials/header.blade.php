@@ -46,13 +46,13 @@
                                 <i class="fab fa-opencart"></i> Comic Shop - Shop bán truyện tranh uy tín nhất
                             </li>
                             <li>
-                                <i class="fab fa-opencart"></i> Giao hàng sau 3 ngày
+                                <i class="fab fa-opencart"></i> Giao hàng sau 2-4 ngày
                             </li>
                             <li>
-                                <i class="fab fa-opencart"></i> Miễn phí ship với đơn hàng từ 60.000 VNĐ
+                                <i class="fab fa-opencart"></i> Miễn phí giao hàng
                             </li>
                             <li>
-                                <i class="fab fa-opencart"></i> Giao hàng sau 3 ngày
+                                <i class="fab fa-opencart"></i> Giao hàng sau 2-4 ngày
                             </li>
                             <li>
                                 <i class="fab fa-opencart"></i> Comic Shop - Shop bán truyện tranh uy tín nhất
@@ -61,7 +61,7 @@
                                 <i class="fab fa-opencart"></i> Khuyến mãi truyện tranh mới lên tới 20%
                             </li>
                             <li>
-                                <i class="fab fa-opencart"></i> Miễn phí ship với đơn hàng từ 60.000 VNĐ 
+                                <i class="fab fa-opencart"></i> Miễn phí giao hàng 
                             </li>
                         </ul>
                     </div>
@@ -94,16 +94,26 @@
                     <li class="dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Thể loại <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                         <ul class="dropdown-menu">
-                            <li><a href="shop.html">Cổ trang</a></li>
-                            <li><a href="shop-detail.html">Thiếu nhi</a></li>
-                            <li><a href="cart.html">Thể thao</a></li>
-                            <li><a href="checkout.html">Thần đồng đất việt</a></li>
-                            <li><a href="my-account.html">Conan</a></li>
-                            <li><a href="wishlist.html">Doraemon</a></li>
-                            <li><a href="wishlist.html">Khác</a></li>
+                            <li><a href="{{ route('product.filter') }}?category=co-trang">Cổ trang</a></li>
+                            <li><a href="{{ route('product.filter') }}?category=thieu-nhi">Thiếu nhi</a></li>
+                            <li><a href="{{ route('product.filter') }}?category=the-thao">Thể thao</a></li>
+                            <li><a href="{{ route('product.filter') }}?category=than-dong-dat-viet">Thần đồng đất việt</a></li>
+                            <li><a href="{{ route('product.filter') }}?category=conan">Conan</a></li>
+                            <li><a href="{{ route('product.filter') }}?category=doraemon">Doraemon</a></li>
+                            <li><a href="{{ route('product.filter') }}?category=khac">Khác</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="gallery.html">Mục yêu thích</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Đối tượng <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ route('product.filter') }}?age=mau-giao">Nhà trẻ - mẫu giáo (0-6 tuổi)</a></li>
+                            <li><a href="{{ route('product.filter') }}?age=nhi-dong">Nhi đồng (6-11 tuổi)</a></li>
+                            <li><a href="{{ route('product.filter') }}?age=thieu-nien">Thiếu niên (11 - 15 tuổi)</a></li>
+                            <li><a href="{{ route('product.filter') }}?age=cha-me-doc-cung-con">Cha mẹ đọc cùng con</a></li>
+                            <li><a href="{{ route('product.filter') }}?age=moi-lon">Tuổi mới lớn (15 - 18 tuổi)</a></li>
+                            <li><a href="{{ route('product.filter') }}?age=thanh-nien">Thanh niên (trên 18 tuổi)</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="contact-us.html">Liên hệ</a></li>
                 </ul>
             </div>
@@ -138,9 +148,9 @@
                     $totalMoney = 0;
                 ?>
                 <ul class="cart-list" id="cartBox">
-                    @if (session()->has('cart'))
+                    @if (session()->has('cart') && count(session('cart')) != 0)
                         @foreach (session('cart') as $item)
-                        <li>
+                        <li id="cart{{ $item['product']->id }}">
                             <a href="{{ route('product', ['id' => $item['product']->id]) }}" style="height: 70px;" class="photo">
                                 <img src="{{ $item['product']->image }}" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
                             </a>
@@ -148,7 +158,7 @@
                                 <h6>
                                     <a href="{{ route('product', ['id' => $item['product']->id]) }}">{{ $item['product']->title }}</a>
                                 </h6>
-                                <p>{{ $item['quantity'] }}x <span class="price">{{ $item['product']->price }} VNĐ</span> 
+                                <p>{{ $item['quantity'] }}x <span class="price">{{ number_format($item['product']->price, 0, ',', ',')}} VNĐ</span> 
                                     <a style="cursor: pointer" id="deleteCart" onclick="deleteCart({{ $item['product']->id }})">
                                         <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
                                     </a>
@@ -163,8 +173,8 @@
                         <p style="text-align: center" id="emptyCart">Chưa có sản phẩm nào</p>
                     @endif
                     <li class="total">
-                        <a href="#" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
-                        <span class="float-right"><strong>Tổng</strong>: {{ $totalMoney }} VNĐ</span>
+                        <a href="{{ route('cart') }}" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
+                        <span class="float-right"><strong>Tổng</strong>: {{ number_format($totalMoney, 0, ',', ',')}} VNĐ</span>
                     </li>
                 </ul>
             </li>
@@ -178,6 +188,10 @@
             </style>
             <script>
             function deleteCart(productId){
+                var productName = '#product'+ productId;
+                var productBox = '#cart'+ productId;
+                $(productName).attr('hidden', true);
+                $(productBox).attr('hidden', true);
                 $.ajax({
                     url: "/cart/delete",
                     type: "DELETE",
@@ -188,33 +202,33 @@
                     success: function(response){
                         if(response.status === "success"){
                             var sessionArray = response.session;
-                            var cart = '';
-                            var totalMoney = 0;
-                            for (var i = 0; i < sessionArray.length; i++) {
-                                cart += `<li>
-                                            <a href="#" style="height: 70px;" class="photo">
-                                                <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
-                                                </a>
-                                            <div style="display: table;">
-                                                <h6>
-                                                    <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
-                                                    </h6>
-                                                <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
-                                                    <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
-                                                        <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </li>`;
-                                    totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
-                            }
-                            $('#cartBox').html(cart);
-                            $('#cartBox').append(`<li class="total">
-                                                    <a href="#" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
-                                                    <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
-                                                </li>`);
+                            // var cart = '';
+                            // var totalMoney = 0;
+                            // for (var i = 0; i < sessionArray.length; i++) {
+                            //     cart += `<li>
+                            //                 <a href="#" style="height: 70px;" class="photo">
+                            //                     <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
+                            //                     </a>
+                            //                 <div style="display: table;">
+                            //                     <h6>
+                            //                         <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
+                            //                         </h6>
+                            //                     <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
+                            //                         <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
+                            //                             <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
+                            //                         </a>
+                            //                     </p>
+                            //                 </div>
+                            //             </li>`;
+                            //         totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
+                            // }
+                            // $('#cartBox').html(cart);
+                            // $('#cartBox').html(`<li class="total">
+                            //                         <a href="#" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
+                            //                         <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
+                            //                     </li>`);
                             $('#totalCart').html(sessionArray.length);
-                            $('#emptyCart').html('Chưa có sản phẩm nào');
+                            // $('#emptyCart').html('Chưa có sản phẩm nào');
                         }
                     },
                     error: function(response){

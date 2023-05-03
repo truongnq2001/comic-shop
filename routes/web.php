@@ -21,11 +21,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PagesController::class, 'home'])->name('home');
 Route::get('/product/{id}', [PagesController::class, 'product'])->name('product');
+Route::get('/filter', [PagesController::class, 'filter'])->name('product.filter')->middleware('checkParameter');
 
 //Cart
 Route::get('/cart', [CartController::class, 'show'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'addCart'])->name('cart.add')->middleware('auth');
+Route::put('/cart/update', [CartController::class, 'updateCart'])->name('cart.update')->middleware('auth');
 Route::delete('/cart/delete', [CartController::class, 'deleteCart'])->name('cart.delete')->middleware('auth');
+Route::get('/checkout', [CartController::class, 'showCheckout'])->name('cart.checkout')->middleware('cartNotEmpty');
 
 //Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
