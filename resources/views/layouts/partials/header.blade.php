@@ -202,31 +202,31 @@
                     success: function(response){
                         if(response.status === "success"){
                             var sessionArray = response.session;
-                            // var cart = '';
-                            // var totalMoney = 0;
-                            // for (var i = 0; i < sessionArray.length; i++) {
-                            //     cart += `<li>
-                            //                 <a href="#" style="height: 70px;" class="photo">
-                            //                     <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
-                            //                     </a>
-                            //                 <div style="display: table;">
-                            //                     <h6>
-                            //                         <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
-                            //                         </h6>
-                            //                     <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
-                            //                         <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
-                            //                             <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
-                            //                         </a>
-                            //                     </p>
-                            //                 </div>
-                            //             </li>`;
-                            //         totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
-                            // }
-                            // $('#cartBox').html(cart);
-                            // $('#cartBox').html(`<li class="total">
-                            //                         <a href="#" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
-                            //                         <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
-                            //                     </li>`);
+                            var cart = '';
+                            var totalMoney = 0;
+                            for (var i = 0; i < sessionArray.length; i++) {
+                                cart += `<li>
+                                            <a href="#" style="height: 70px;" class="photo">
+                                                <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
+                                                </a>
+                                            <div style="display: table;">
+                                                <h6>
+                                                    <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
+                                                    </h6>
+                                                <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
+                                                    <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
+                                                        <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </li>`;
+                                    totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
+                            }
+                            $('#cartBox').html(cart);
+                            $('#cartBox').append(`<li class="total">
+                                                    <a href="/cart" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
+                                                    <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
+                                                </li>`);
                             $('#totalCart').html(sessionArray.length);
                             // $('#emptyCart').html('Chưa có sản phẩm nào');
                         }
@@ -251,8 +251,17 @@
     <div class="container">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-search"></i></span>
-            <input type="text" class="form-control" placeholder="Search">
+            <input id="searchProduct" type="text" class="form-control" placeholder="Tìm kiếm...">
             <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+            <script>
+                $('#searchProduct').keypress(function(event){
+                    var keycode = (event.keyCode ? event.keyCode : event.which);
+                    if(keycode == '13'){
+                        window.location.href = '/filter?search=' + $('#searchProduct').val();
+                        console.log('Enter key pressed');
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>

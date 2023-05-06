@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,31 +25,49 @@ class PagesController extends Controller
     {
         //Truy vấn bảng sản phẩm
         $queryFilter = DB::table('products');
+
+        $titleAge = '';
+        $titleCategory = '';
         
         //Lọc theo đối tượng
         if ($request->age) {
+            $titleAge = $this->switchAge($request->age);
             $queryFilter = $queryFilter->where('age', 'like', '%'.$this->switchAge($request->age).'%');
         }
 
         //Lọc theo danh mục
         if ($request->category) {
+            $titleCategory = $this->switchCategory($request->category);
             $queryFilter = $queryFilter->join('categories', 'products.category_id', '=', 'categories.id')
             ->select('products.*', 'categories.name as category_name')
             ->where('categories.name', 'like', '%'.$this->switchCategory($request->category).'%');
+        }
+
+        //Lọc theo kết quả search
+        if ($request->search) {
+            $queryFilter = $queryFilter->where('title', 'like', '%'.$request->search.'%');
         }
 
         //Lọc theo tăng giảm dần(giá)
         if ($request->sort) {
             $queryFilter = $queryFilter->orderBy('price', $request->sort);
         }
-        // $str = 'Thiếu niên (11 - 15 tuổi)';
-        // dd( DB::table('products')->where('age', 'like', '%'.$str.'%')->get());
+
+        //Lọc theo giá
+        if ($request->price) {
+            $arrPriceFilter = $this->switchPrice($request->price);
+            $queryFilter = $queryFilter->whereBetween('price', [$arrPriceFilter[0], $arrPriceFilter[1]]);
+        }
+
         return view('pages/filter',[
             'getCategory' => $request->category,
             'getAge' => $request->age,
             'getSort' => $request->sort,
             'getPrice' => $request->price,
-            'productsFilter' => $queryFilter->get(),
+            'getSearch' => $request->search,
+            'titleAge' => $titleAge,
+            'titleCategory' => $titleCategory,
+            'productsFilter' => $queryFilter->paginate(12),
         ]);
     }
 
@@ -60,10 +79,36 @@ class PagesController extends Controller
                             ->where('id', '<>', $id)
                             ->take(5)->get();
 
+        $commentList = new CommentController();
+
         return view('pages/detail', [
             'product' => Product::find($id),
             'relatedProducts' => $relatedProducts,
+            'commentList' => $commentList->show($id)->paginate(3),
         ]);
+    }
+
+    public function switchPrice($requestPrice)
+    {
+        switch ($requestPrice) {
+            case '0-15000':
+                $priceFilter = [0, 15000];
+                break;
+            
+            case '15000-50000':
+                $priceFilter = [15000, 50000];
+                break;
+
+            case '50000-100000':
+                $priceFilter = [50000, 100000];
+                break;
+            
+            case '100000-max':
+                $priceFilter = [100000, 999999];
+                break;
+
+        }
+        return $priceFilter;
     }
 
     public function switchCategory($requestCategory)

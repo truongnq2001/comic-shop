@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PagesController::class, 'home'])->name('home');
 Route::get('/product/{id}', [PagesController::class, 'product'])->name('product');
 Route::get('/filter', [PagesController::class, 'filter'])->name('product.filter')->middleware('checkParameter');
+
+//Comment
+Route::post('/comment/add', [CommentController::class, 'store'])->name('comment.add')->middleware('auth');
+Route::delete('/comment/delete', [CommentController::class, 'delete'])->name('comment.delete')->middleware('auth');
+Route::post('/comment/load_more', [CommentController::class, 'loadMore'])->name('comment.loadMore');
 
 //Cart
 Route::get('/cart', [CartController::class, 'show'])->name('cart');
@@ -51,6 +57,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
         Route::delete('/{id}', [ProductController::class, 'destroy'])->name('admin.product.destroy');
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
         Route::put('/edit/{id}', [ProductController::class, 'update'])->name('admin.product.update');
+
+        //change page
+        Route::post('/', [ProductController::class, 'changePage'])->name('admin.product.changePage');
     });
     //category
     Route::group(['prefix' => 'category'], function(){
@@ -58,5 +67,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
         Route::post('/create', [CategoryController::class, 'store'])->name('admin.category.store');
         Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
     });
+    //comment
+    Route::get('/comment', [CommentController::class, 'index'])->name('admin.comment.show');
 });
 

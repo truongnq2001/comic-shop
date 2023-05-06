@@ -1,10 +1,22 @@
 @extends('layouts.master')
-@section('title', 'Comic Shop')
+@if ($getAge)
+    @section('title', $titleAge.' - Comic Shop')
+@elseif($getCategory)
+    @section('title', $titleCategory.' - Comic Shop')
+@elseif($getSearch)
+    @section('title', 'Kết quả tìm kiếm - Comic Shop')
+@endif
 @section('content')
 
     <!-- Start Shop Page  -->
     <div class="shop-box-inner">
         <div class="container">
+            @if ($getAge || $getCategory)
+            <p style="margin-bottom: 20px; font-size: 19px;">Trang chủ > @if ($getAge) {{ $titleAge }} @endif @if ($getCategory) {{ $titleCategory }} @endif</p>
+            @endif
+            @if ($getSearch)
+            <p style="margin-bottom: 20px; font-size: 19px;">Kết quả tìm kiếm cho từ khóa: {{ $getSearch }} </p>
+            @endif
             <div class="row">
                 <div class="col-xl-9 col-lg-9 col-sm-12 col-xs-12 shop-content-right">
                     <div class="right-product-box">
@@ -26,7 +38,7 @@
                                         <option value="{{ getUrlExcept('sort') }}&sort=asc" @if ($getSort == 'asc') selected @endif>Giá thấp → cao</option>
 								    </select>
                                 </div>
-                                <p>Có tất cả {{ count($productsFilter) }} sản phẩm</p>
+                                <p>Có tất cả {{ $productsFilter->total() }} sản phẩm</p>
                             </div>
                             {{-- <div class="col-12 col-sm-4 text-center text-sm-right">
                                 <ul class="nav nav-tabs ml-auto">
@@ -51,24 +63,78 @@
                                                     <div class="type-lb">
                                                         <p class="sale">Sale</p>
                                                     </div>
-                                                    <img src="images/img-pro-01.jpg" class="img-fluid" alt="Image">
+                                                    <a href="{{ route('product', ['id' => $item->id]) }}">
+                                                        <img src="{{ $item->image }}" class="img-fluid" alt="Image" style="height: 355px; width: 255px; object-fit: cover;">
+                                                    </a>
                                                     <div class="mask-icon">
                                                         <ul>
-                                                            <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
-                                                            <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
-                                                            <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                                            <li><a href="{{ route('product', ['id' => $item->id]) }}" data-toggle="tooltip" data-placement="right" title="Xem chi tiết"><i class="fas fa-eye"></i></a></li>
+                                                            <li><a href="" data-toggle="tooltip" data-placement="right" title="Thêm vào yêu thích"><i class="far fa-heart"></i></a></li>
                                                         </ul>
-                                                        <a class="cart" href="#">Add to Cart</a>
+                                                        @auth
+                                                            <a class="cart" onclick="addCart({{ $item->id }})" style="cursor: pointer;">Thêm vào giỏ hàng</a>
+                                                        @else
+                                                            <a class="cart" onclick="alert('Vui lòng đăng nhập để mua hàng!')" style="cursor: pointer;">Thêm vào giỏ hàng</a>
+                                                        @endauth
                                                     </div>
                                                 </div>
                                                 <div class="why-text">
-                                                    <h4>{{ $item->title }}</h4>
-                                                    <h5> {{ $item->price }}</h5>
+                                                    <a href="{{ route('product', ['id' => $item->id]) }}"><h4>{{ $item->title }}</h4></a>
+                                                    <h5> {{ number_format($item->price, 0, ',', ',')}} VNĐ</h5>
                                                 </div>
                                             </div>
                                         </div>
                                         @endforeach
-                                        
+                                        <script>
+                                            function addCart(productId){
+                                                $.ajax({
+                                                    url: "/cart/add",
+                                                    type: "POST",
+                                                    data: {
+                                                        "_token": "{{ csrf_token() }}",
+                                                        "productId": productId,
+                                                        "quantity": 1,
+                                                    },
+                                                    success: function(response){
+                                                        if(response.status === "success"){
+                                                            // alert(response.message);
+                                                            var sessionArray = response.session;
+                                                            var cart = '';
+                                                            var totalMoney = 0;
+                                                            for (var i = 0; i < sessionArray.length; i++) {
+                                                                cart += `<li>
+                                                                            <a href="#" style="height: 70px;" class="photo">
+                                                                                <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
+                                                                                </a>
+                                                                            <div style="display: table;">
+                                                                                <h6>
+                                                                                    <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
+                                                                                    </h6>
+                                                                                <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
+                                                                                    <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
+                                                                                        <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
+                                                                                    </a>
+                                                                                </p>
+                                                                            </div>
+                                                                        </li>`;
+                                                                 totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
+                                                            }
+                                                            $('#cartBox').html(cart);
+                                                            $('#cartBox').append(`<li class="total">
+                                                                                    <a href="/cart" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
+                                                                                    <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
+                                                                                </li>`);
+                                                            $('#totalCart').html(sessionArray.length);
+                                                        }
+                                                    },
+                                                    error: function(response){
+                                                        if (response.status === 'error') {
+                                                            alert(response.message)
+                                                        }
+                                                    },                            
+                                                });
+                                            }   
+                                        </script>
                                         {{-- <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                                             <div class="products-single fix">
                                                 <div class="box-img-hover">
@@ -247,6 +313,34 @@
                                         </div> --}}
                                     </div>
                                 </div>
+                                <div id="pageList">
+                                    {{ $productsFilter->withQueryString()->render('pagination::bootstrap-4') }}
+                                </div>
+                                <style>
+                                .pagination{
+                                    justify-content: center;
+                                }
+                                .page-item.active .page-link {
+                                    z-index: 1;
+                                    color: #fff !important;
+                                    background-color: #b0b435 !important;
+                                    border-color: #b0b435 !important;
+                                }
+                                .page-link {
+                                    color: black !important;
+                                    font-size: 17px !important;
+                                }
+                                .page-link:hover {
+                                    color: black !important;
+                                    background: #e4e4cd;
+                                }
+                                .page-item.disabled .page-link{
+                                    color: #a3a5a7 !important;
+                                }
+                                .page-link:focus {
+                                    box-shadow: none !important;
+                                }
+                                </style>
                                 {{-- <div role="tabpanel" class="tab-pane fade" id="list-view">
                                     <div class="list-view-box">
                                         <div class="row">
@@ -351,12 +445,12 @@
                 </div>
 				<div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
                     <div class="product-categori">
-                        <div class="search-product">
+                        {{-- <div class="search-product">
                             <form action="#">
                                 <input class="form-control" placeholder="Tìm kiếm..." type="text">
                                 <button type="submit"> <i class="fa fa-search"></i> </button>
                             </form>
-                        </div>
+                        </div> --}}
                         <div class="filter-sidebar-left">
                             <div class="title-left">
                                 <h3>Bộ lọc</h3>

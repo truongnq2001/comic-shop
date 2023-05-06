@@ -77,13 +77,13 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="special-menu text-center">
+                    {{-- <div class="special-menu text-center">
                         <div class="button-group filter-button-group">
                             <button class="active" data-filter="*">Tất cả</button>
                             <button data-filter=".top-featured">Khuyến mại</button>
                             <button data-filter=".best-seller">Bán chạy nhất</button>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
@@ -152,7 +152,7 @@
                                         }
                                         $('#cartBox').html(cart);
                                         $('#cartBox').append(`<li class="total">
-                                                                <a href="#" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
+                                                                <a href="/cart" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
                                                                 <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
                                                             </li>`);
                                         $('#totalCart').html(sessionArray.length);

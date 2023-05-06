@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="avatar-sm">
                                     <span class="avatar-title bg-light text-success rounded-3">
-                                        <i class="mdi mdi-currency-usd font-size-24"></i>  
+                                        <i class="ri-shopping-cart-2-line font-size-24"></i>  
                                     </span>
                                 </div>
                             </div>                                              

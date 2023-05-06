@@ -17,7 +17,26 @@ class ProductController extends Controller
     public function index()
     {
         return view('admin.product.showProduct',[
-            'products' => Product::with('category')->orderBy('created_at', 'desc')->get(),
+            'products' => Product::with('category')->orderBy('created_at', 'desc')->paginate(8),
+            'page' => 1,
+        ]);
+    }
+
+    //change page
+    public function changePage(Request $request)
+    {
+        $view = view('admin.product.listProduct', [
+            'products' => Product::with('category')
+                            ->orderBy('created_at', 'desc')
+                            ->paginate(8, ['*'], 'page', $request->page),
+            'page' => $request->page,
+
+            ])->render();
+        
+        return Response::json([
+            'status' => 'success',
+            'message' => 'Chuyển trang thành công',
+            'html' => $view,
         ]);
     }
 
@@ -116,24 +135,21 @@ class ProductController extends Controller
     //destroy
     public function destroy(int $id)
     {
-        try {
             //Xóa ảnh đã lưu
             $this->deleteImageSaved($id);
 
             //Xóa sản phẩm
             Product::findOrFail($id)->delete();
 
+            $view = view('admin.product.listProduct', [
+                'products' => Product::with('category')->orderBy('created_at', 'desc')->paginate(8),
+                ])->render();
+
             return Response::json([
                 'status' => 'success',
                 'message' => 'Xóa sản phẩm thành công!',
-                'products' => Product::with('category')->orderBy('created_at', 'desc')->get(),
+                'html' => $view,
             ], 200);
-        } catch (\Exception $e) {
-            return Response::json([
-                'status' => 'error',
-                'message' => 'Đã xảy ra lỗi khi xóa sản phẩm!',
-            ], 500);
-        }
     }
 
     //delete image saved

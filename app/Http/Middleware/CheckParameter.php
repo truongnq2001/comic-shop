@@ -15,7 +15,7 @@ class CheckParameter
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->has('age') || $request->has('category')) {
+        if ($request->has('age') || $request->has('category') || $request->has('search')) {
             return $next($request);
         }
 

@@ -12,7 +12,7 @@ class AdminController extends Controller
     //dashboard
     public function dashboard(){
         return view('admin.overview',[
-            'products' => Product::orderBy('created_at', 'desc')->take(10)->get(),
+            'products' => Product::orderBy('updated_at', 'desc')->take(10)->get(),
             'productTotal' => Product::count(),
             'categories' => Category::all(),
             'categoryTotal' => Category::count(),

@@ -12,15 +12,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0">Danh sách sản phẩm</h4>
-
-                                    <div class="page-title-right">
-                                        <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sản phẩm</a></li>
-                                            <li class="breadcrumb-item active">Danh sách sản phẩm</li>
-                                        </ol>
-                                    </div>
-
+                                    <h4 class="mb-sm-0">Danh sách bình luận</h4>
                                 </div>
                             </div>
                         </div>
@@ -33,47 +25,7 @@
         
                                         <div class="table-rep-plugin" id="tableProduct">
                                             
-                                                {{-- <table id="tech-companies-1" class="table">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>STT</th>
-                                                        <th data-priority="1">Tên truyện</th>
-                                                        <th data-priority="3">Ảnh</th>
-                                                        <th data-priority="1">Tác giả</th>
-                                                        <th data-priority="3">Thể loại</th>
-                                                        <th data-priority="6">Giá tiền</th>
-                                                        <th data-priority="6">Ngày cập nhật</th>
-                                                        <th data-priority="6">Ngày tạo</th>
-                                                        <th data-priority="6">Sửa</th>
-                                                        <th data-priority="6">Xóa</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @for ($i = 0; $i < count($products); $i++)
-                                                        <tr>
-                                                            <td>{{ $i+1 }}</td>
-                                                            <td class="title">{{ $products[$i]->title }}</td>
-                                                            <td>
-                                                                <img src="{{ asset($products[$i]->image) }}" alt="Ảnh truyện" style="object-fit: cover; width: 70px; height: 100px;">
-                                                            </td>
-                                                            <td class="author">{{ $products[$i]->author }}</td>
-                                                            <td class="category">{{ $products[$i]->category->name }}</td>
-                                                            <td>{{ number_format($products[$i]->price, 0, ',', ',')}} VNĐ</td>
-                                                            <td>{{ $products[$i]->updated_at }}</td>
-                                                            <td>{{ $products[$i]->created_at }}</td>
-                                                            <td>
-                                                                <a href="/admin/product/edit/{{$products[$i]->id}}">
-                                                                    <button class="btn btn-warning">Sửa</button>
-                                                                </a>
-                                                            </td>
-                                                            <td>
-                                                                <button id="deleteCategory" class="btn btn-danger" onclick="deleteProduct({{ $products[$i]->id }})">Xóa</button>                                           
-                                                            </td>      
-                                                        </tr>
-                                                    @endfor
-                                                    </tbody>
-                                                </table> --}}
-                                                @include('admin.product.listProduct')
+                                                @include('admin.comment.listComment')
         
                                         </div>
         
@@ -113,16 +65,16 @@
                                     .page-link:hover {
                                         color: #252b3b !important;
                                     }
-                                    td.title{
+                                    td.content{
                                         max-width: 300px;
                                         white-space: normal;
                                     }
-                                    td.author{
+                                    td.user{
                                         max-width: 100px;
                                         white-space: normal;
                                     }
-                                    td.category{
-                                        max-width: 120px;
+                                    td.title{
+                                        max-width: 200px;
                                         white-space: normal;
                                     }
                                     </style>
