@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +36,9 @@ Route::post('/cart/add', [CartController::class, 'addCart'])->name('cart.add')->
 Route::put('/cart/update', [CartController::class, 'updateCart'])->name('cart.update')->middleware('auth');
 Route::delete('/cart/delete', [CartController::class, 'deleteCart'])->name('cart.delete')->middleware('auth');
 Route::get('/checkout', [CartController::class, 'showCheckout'])->name('cart.checkout')->middleware('cartNotEmpty');
+
+Route::post('/checkout', [CartController::class, 'storeCheckout'])->name('cart.checkout.store')->middleware('cartNotEmpty');
+Route::get('/order', [CartController::class, 'showOrder'])->name('order.show');
 
 //Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
@@ -67,7 +71,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
         Route::post('/create', [CategoryController::class, 'store'])->name('admin.category.store');
         Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
     });
+    //user
+    Route::get('/user', [UserController::class, 'index'])->name('admin.user.show');
     //comment
     Route::get('/comment', [CommentController::class, 'index'])->name('admin.comment.show');
+    Route::put('/comment', [CommentController::class, 'updateStatus'])->name('admin.comment.updateStatus');
+    Route::post('/comment', [CommentController::class, 'changePage'])->name('admin.comment.changePage');
 });
 

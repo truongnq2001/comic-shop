@@ -7,43 +7,55 @@
         <th data-priority="1">Tên truyện</th>
         <th data-priority="6">Ngày cập nhật</th>
         <th data-priority="6">Ngày tạo</th>
-        <th data-priority="6">Trạng thái</th>
+        <th data-priority="6">Hiển thị</th>
     </tr>
     </thead>
     <tbody>
         @foreach ($comments as $key => $item)
         <tr>
-            <td>{{ 1 }}</td>
+            <td>{{ $key + 1 + ($page - 1)*$comments->perPage() }}</td>
             <td class="content">{{ $item->content }}</td>
             <td class="user">{{ $item->user->name }}</td>
             <td class="title">{{ $item->product->title }}</td>
             <td>{{ \Carbon\Carbon::parse($item->updated_at)->format('H:i:s d-m-Y') }}</td>
             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i:s d-m-Y') }}</td>
+            <td style="text-align: center;">
+                @if ($item->status == 0) 
+                <i class="ri-eye-fill" id="changeIcon" onclick="updateStatusComment({{ $item->id }}, 1, {{ $page }})" style="cursor: pointer; font-size: 20px;"></i> 
+                @else 
+                <i class="ri-eye-off-fill" id="changeIcon" onclick="updateStatusComment({{ $item->id }}, 0, {{ $page }})" style="cursor: pointer; font-size: 20px;"></i> 
+                @endif
+            </td>
             <td>
-                <select class="form-select" aria-label="Default select example">
-                    <option @if ($item->status == 0) selected @endif>Hiển thị</option>
-                    <option @if ($item->status == 1) selected @endif>Ẩn</option>
-                  </select>                                           
-            </td>      
+              <a id="deleteCategory" style="cursor: pointer;">
+                  <i class="ri-delete-bin-6-line" id="changeIcon" style="font-size: 21px;"></i>
+              </a>                                           
+          </td>     
         </tr>
         @endforeach
     </tbody>
 </table>
 
-{{-- <div style="justify-content: center; display: flex;">
+<style>
+  #changeIcon:hover{
+      color: #117fe4 !important;
+  }
+  </style>
+
+<div style="justify-content: center; display: flex;">
     <nav aria-label="...">
         <ul class="pagination">
           <li @if ($page == 1) class="page-item disabled" @else class="page-item" @endif>
             <a class="page-link" onclick="changePage({{ $page-1 }})" style="cursor: pointer;">Trước</a>
           </li>
-          @for ($i = 1; $i <= $products->lastPage(); $i++)
+          @for ($i = 1; $i <= $comments->lastPage(); $i++)
             <li @if ($i == $page) class="page-item active" @else class="page-item" @endif onclick="changePage({{ $i }})" style="cursor: pointer;">
                 <a class="page-link">{{ $i }}</a>
             </li>
           @endfor
-          <li @if ($page == $products->lastPage()) class="page-item disabled" @else class="page-item" @endif>
+          <li @if ($page == $comments->lastPage()) class="page-item disabled" @else class="page-item" @endif>
             <a class="page-link" onclick="changePage({{ $page+1 }})" style="cursor: pointer;">Sau</a>
           </li>
         </ul>
     </nav>
-</div> --}}
+</div>

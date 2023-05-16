@@ -3,14 +3,14 @@
     <tr>
         <th>STT</th>
         <th data-priority="1">Tên truyện</th>
-        <th data-priority="3">Ảnh</th>
+        {{-- <th data-priority="3">Ảnh</th> --}}
         <th data-priority="1">Tác giả</th>
         <th data-priority="3">Thể loại</th>
         <th data-priority="6">Giá tiền</th>
         <th data-priority="6">Ngày cập nhật</th>
         <th data-priority="6">Ngày tạo</th>
-        <th data-priority="6">Sửa</th>
-        <th data-priority="6">Xóa</th>
+        <th data-priority="6"></th>
+        <th data-priority="6"></th>
     </tr>
     </thead>
     <tbody>
@@ -18,9 +18,9 @@
         <tr>
             <td>{{ $key + 1 + ($page - 1)*$products->perPage() }}</td>
             <td class="title">{{ $item->title }}</td>
-            <td>
+            {{-- <td>
                 <img src="{{ asset($item->image) }}" alt="Ảnh truyện" style="object-fit: cover; width: 70px; height: 100px;">
-            </td>
+            </td> --}}
             <td class="author">{{ $item->author }}</td>
             <td class="category">{{ $item->category->name }}</td>
             <td>{{ number_format($item->price, 0, ',', ',')}} VNĐ</td>
@@ -28,16 +28,23 @@
             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i:s d-m-Y') }}</td>
             <td>
                 <a href="/admin/product/edit/{{$item->id}}">
-                    <button class="btn btn-warning">Sửa</button>
+                    <i class="ri-edit-line" id="changeIcon" style="font-size: 21px; color: #505d69;"></i>
                 </a>
             </td>
             <td>
-                <button id="deleteCategory" class="btn btn-danger" onclick="deleteProduct({{ $item->id }})">Xóa</button>                                           
+                <a id="deleteCategory" onclick="deleteProduct({{ $item->id }})" style="cursor: pointer;">
+                    <i class="ri-delete-bin-6-line" id="changeIcon" style="font-size: 21px;"></i>
+                </a>                                           
             </td>      
         </tr>
         @endforeach
     </tbody>
 </table>
+<style>
+#changeIcon:hover{
+    color: #117fe4 !important;
+}
+</style>
 
 <div style="justify-content: center; display: flex;">
     <nav aria-label="...">

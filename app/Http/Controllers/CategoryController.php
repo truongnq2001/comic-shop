@@ -35,11 +35,16 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->save();
 
+        //render html
+        $view = view('admin.category.listCategory',[
+            'categories' => Category::all(),
+        ])->render();
+
         //response
         return Response::json([
             'status' => 'success',
             'message' => 'Thêm danh mục thành công!',
-            'categories' => Category::all(),
+            'html' => $view,
         ],200);
     }
 
@@ -48,10 +53,14 @@ class CategoryController extends Controller
     {
         Category::findOrFail($id)->delete();
 
+        $view = view('admin.category.listCategory',[
+            'categories' => Category::all(),
+        ])->render();
+
         return Response::json([
             'status' => 'success',
             'message' => 'Xóa danh mục thành công!',
-            'categories' => Category::all(),
+            'html' => $view,
         ], 200);
     }
 }

@@ -13,6 +13,7 @@ class PagesController extends Controller
     {
         return view('pages/home',[
             'productNew' => Product::orderBy('created_at', 'desc')->take(8)->get(),
+            'tddv' => Product::where('category_id', '=', '63')->orderBy('created_at', 'desc')->take(8)->get(),
         ]);
     }
 
@@ -67,7 +68,7 @@ class PagesController extends Controller
             'getSearch' => $request->search,
             'titleAge' => $titleAge,
             'titleCategory' => $titleCategory,
-            'productsFilter' => $queryFilter->paginate(12),
+            'productsFilter' => $queryFilter->orderBy('created_at', 'desc')->paginate(12),
         ]);
     }
 

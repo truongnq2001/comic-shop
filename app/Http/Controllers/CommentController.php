@@ -14,14 +14,55 @@ class CommentController extends Controller
     public function index()
     {
         return view('admin.comment.showComment',[
-            'comments' => Comment::all(),
+            'comments' => Comment::orderBy('created_at', 'desc')->paginate(12),
+            'page' => 1,
+        ]);
+    }
+
+    //change page
+    public function changePage(Request $request)
+    {
+
+        $view = view('admin.comment.listComment', [
+            'comments' => Comment::orderBy('created_at', 'desc')
+                            ->paginate(12, ['*'], 'page', $request->page),
+            'page' => $request->page,
+
+            ])->render();
+        
+        return Response::json([
+            'status' => 'success',
+            'message' => 'Chuyển trang thành công',
+            'html' => $view,
+        ]);
+    }
+
+    //update status
+    public function updateStatus(Request $request)
+    {
+        Comment::where('id', '=', $request->commentId)->update([
+            'status' => $request->status,
+        ]);
+
+        $view = view('admin.comment.listComment',[
+            'comments' => Comment::orderBy('created_at', 'desc')
+                            ->paginate(12, ['*'], 'page', $request->page),
+            'page' => $request->page,
+        ])->render();
+
+        return Response::json([
+            'status' => 'success',
+            'message' => 'Cập nhật trạng thái bình luận thành công!',
+            'html' => $view,
         ]);
     }
 
     //show comment
     public function show(int $productId)
     {
-        return Comment::where('product_id', '=', $productId)->orderBy('created_at', 'desc');
+        return Comment::where('product_id', '=', $productId)
+                        ->orderBy('created_at', 'desc')
+                        ->where('status', '=', 0);
     }
 
     //load more
@@ -89,18 +130,5 @@ class CommentController extends Controller
             'message' => 'Thêm bình luận thành công!',
             'html' => $view,
         ]);
-
-        // $listComments = DB::table('comments')->join('users', 'comments.user_id', '=', 'users.id')
-        //                         ->where('comments.product_id',  $request->productId)
-        //                         ->orderBy('created_at', 'desc')
-        //                         ->select('comments.*', 'users.name as user_name')->get();
-
-        // return Response::json([
-        //     'status' => 'success',
-        //     'message' => 'Thêm bình luận thành công!',
-        //     'comments' => $listComments,
-        //     'userLogin'  => $request->userId,
-        //     'productId'  => $request->productId,
-        // ]);
     }
 }

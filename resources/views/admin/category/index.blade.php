@@ -9,101 +9,75 @@
                     <div class="card-body">
                         <h4 class="card-title" style="font-weight: bold;">DANH SÁCH CÁC DANH MỤC</h4>                       
                         <div class="table">
-                            <table class="table mb-0">
+                            <table class="table mb-0" id="tableCategory">
     
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>STT</th>
-                                        <th>Tên</th>
-                                        <th>Số lượng</th>
-                                        <th>Cập nhật</th>
-                                        <th>Ngày đăng</th>
-                                        <th>Sửa</th>
-                                        <th>Xóa</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for ($i = 0; $i < count($categories); $i++)
-                                    <tr>
-                                        <th scope="row">{{ $i+1 }}</th>
-                                        <td>{{ $categories[$i]->name }}</td>
-                                        <td>20</td>
-                                        <td>{{ $categories[$i]->updated_at }}</td>
-                                        <td>{{ $categories[$i]->created_at }}</td>
-                                        <td><button class="btn btn-warning">Sửa</button></td>
-                                        <td>
-                                            <button onclick="deleteCategory({{ $categories[$i]->id }})" class="btn btn-danger" >Xóa</button>                                           
-                                        </td>                                       
-                                    </tr>
-                                    @endfor
-                                </tbody>
-                                <script>
-                                //format date
-                                function formatDate(dateString)
-                                {
-                                    var date = new Date(dateString);
-
-                                    var year = date.getFullYear();
-                                    var month = ("0" + (date.getMonth() + 1)).slice(-2);
-                                    var day = ("0" + date.getDate()).slice(-2);
-                                    var hours = ("0" + date.getHours()).slice(-2);
-                                    var minutes = ("0" + date.getMinutes()).slice(-2);
-                                    var seconds = ("0" + date.getSeconds()).slice(-2);
-
-                                    var formattedDate = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
-
-                                    return formattedDate;
-                                }
-
-                                //show list category
-                                function showListCategory(newCategories)
-                                {
-                                    var tbodyHtml = '';
-                                    for (var i = 0; i < newCategories.length; i++) {
-                                        tbodyHtml += '<tr>' +
-                                            '<th scope="row">' + (i+1) + '</th>' +
-                                            '<td>' + newCategories[i].name + '</td>' +
-                                            '<td>20</td>' +
-                                            '<td>' + formatDate(newCategories[i].updated_at) + '</td>' +
-                                            '<td>' + formatDate(newCategories[i].created_at) + '</td>' +
-                                            '<td><button class="btn btn-warning">Sửa</button></td>' +
-                                            '<td><button onclick="deleteCategory(' + newCategories[i].id + ')" class="btn btn-danger">Xóa</button></td>' +
-                                            '</tr>';
-                                    }
-                                    $('tbody').html(tbodyHtml);
-                                }
-
-                                //delete category
-                                function deleteCategory(categoryId) 
-                                {
-                                    if(confirm('Bạn có chắc chắn muốn xóa danh mục này không?'))
-                                    {
-                                        $.ajax({
-                                            url: "/admin/category/" + categoryId, 
-                                            type: "DELETE",
-                                            data: {
-                                                "_token": "{{ csrf_token() }}" 
-                                            },
-                                            success: function(response) {
-                                                console.log(response);
-                                                // delete success
-                                                if (response.status === 'success') {
-                                                    alert(response.message)
-                                                    showListCategory(response.categories);
-                                                }
-                                            },
-                                            error: function(response) {
-                                                // delete fail
-                                                // console.log(response);
-                                                alert(response.responseJSON.message);
-                                            }
-                                        });
-                                    }
-                                };                                   
-                                </script>
+                                @include('admin.category.listCategory')
+                               
                             </table>
                         </div>
-    
+                        <script>
+                            //format date
+                            function formatDate(dateString)
+                            {
+                                var date = new Date(dateString);
+
+                                var year = date.getFullYear();
+                                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                                var day = ("0" + date.getDate()).slice(-2);
+                                var hours = ("0" + date.getHours()).slice(-2);
+                                var minutes = ("0" + date.getMinutes()).slice(-2);
+                                var seconds = ("0" + date.getSeconds()).slice(-2);
+
+                                var formattedDate = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+
+                                return formattedDate;
+                            }
+
+                            //show list category
+                            function showListCategory(newCategories)
+                            {
+                                var tbodyHtml = '';
+                                for (var i = 0; i < newCategories.length; i++) {
+                                    tbodyHtml += '<tr>' +
+                                        '<th scope="row">' + (i+1) + '</th>' +
+                                        '<td>' + newCategories[i].name + '</td>' +
+                                        '<td>20</td>' +
+                                        '<td>' + formatDate(newCategories[i].updated_at) + '</td>' +
+                                        '<td>' + formatDate(newCategories[i].created_at) + '</td>' +
+                                        '<td><button class="btn btn-warning">Sửa</button></td>' +
+                                        '<td><button onclick="deleteCategory(' + newCategories[i].id + ')" class="btn btn-danger">Xóa</button></td>' +
+                                        '</tr>';
+                                }
+                                $('tbody').html(tbodyHtml);
+                            }
+
+                            //delete category
+                            function deleteCategory(categoryId) 
+                            {
+                                if(confirm('Bạn có chắc chắn muốn xóa danh mục này không?'))
+                                {
+                                    $.ajax({
+                                        url: "/admin/category/" + categoryId, 
+                                        type: "DELETE",
+                                        data: {
+                                            "_token": "{{ csrf_token() }}" 
+                                        },
+                                        success: function(response) {
+                                            console.log(response);
+                                            // delete success
+                                            if (response.status === 'success') {
+                                                $('#tableCategory').html(response.html);
+                                            }
+                                        },
+                                        error: function(response) {
+                                            // delete fail
+                                            // console.log(response);
+                                            alert(response.responseJSON.message);
+                                        }
+                                    });
+                                }
+                            };                                   
+                            </script>
                     </div>
                 </div>
             </div>
@@ -207,7 +181,7 @@
                                         // delete success
                                         if (response.status === 'success') {
                                             // alert(response.message)
-                                            showListCategory(response.categories);
+                                            $('#tableCategory').html(response.html);
                                             refreshInput();
                                         }
                                     },

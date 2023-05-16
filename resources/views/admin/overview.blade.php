@@ -117,7 +117,7 @@
                                             <td class="author">{{ $item->author }}</td>
                                             <td class="category">{{ $item->category->name }}</td>
                                             <td class="price">{{ number_format($item->price, 0, ',', ',')}} VNĐ</td>
-                                            <td class="updated_at">{{ $item->updated_at }}</td>
+                                            <td class="updated_at">{{ \Carbon\Carbon::parse($item->updated_at)->format('H:i:s d-m-Y') }}</td>
                                         </tr>
                                         @endforeach
                                         

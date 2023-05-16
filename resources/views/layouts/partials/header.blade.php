@@ -114,7 +114,11 @@
                             <li><a href="{{ route('product.filter') }}?age=thanh-nien">Thanh niên (trên 18 tuổi)</a></li>
                         </ul>
                     </li>
+                    @auth
+                    <li class="nav-item"><a class="nav-link" href="">Đơn hàng</a></li>
+                    @else
                     <li class="nav-item"><a class="nav-link" href="contact-us.html">Liên hệ</a></li>
+                    @endauth
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0">Danh sách bình luận</h4>
+                                    <h4 class="mb-sm-0">Danh sách người dùng</h4>
                                 </div>
                             </div>
                         </div>
@@ -25,7 +25,54 @@
         
                                         <div class="table-rep-plugin" id="tableComment">
                                             
-                                                @include('admin.comment.listComment')
+                                            <table id="tech-companies-1" class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th data-priority="1">Tên</th>
+                                                    <th data-priority="3">Email</th>
+                                                    <th data-priority="1">Quyền</th>
+                                                    <th data-priority="6">Ngày cập nhật</th>
+                                                    <th data-priority="6">Ngày tạo</th>
+                                                    {{-- <th data-priority="6">Hiển thị</th> --}}
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($users as $key => $item)
+                                                    <tr>
+                                                        <td>{{ 1 }}</td>
+                                                        <td class="name">{{ $item->name }}</td>
+                                                        <td class="email">{{ $item->email }}</td>
+                                                        <td class="is_admin">@if ($item->is_admin == 1) Quản trị viên @else Người dùng @endif</td>
+                                                        <td>{{ \Carbon\Carbon::parse($item->updated_at)->format('H:i:s d-m-Y') }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i:s d-m-Y') }}</td>
+                                                        <td>
+                                                            <a id="deleteCategory" style="cursor: pointer;">
+                                                                <i class="ri-delete-bin-6-line" id="changeIcon" style="font-size: 21px;"></i>
+                                                            </a>                                           
+                                                        </td> 
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                            
+                                            {{-- <div style="justify-content: center; display: flex;">
+                                                <nav aria-label="...">
+                                                    <ul class="pagination">
+                                                      <li @if ($page == 1) class="page-item disabled" @else class="page-item" @endif>
+                                                        <a class="page-link" onclick="changePage({{ $page-1 }})" style="cursor: pointer;">Trước</a>
+                                                      </li>
+                                                      @for ($i = 1; $i <= $comments->lastPage(); $i++)
+                                                        <li @if ($i == $page) class="page-item active" @else class="page-item" @endif onclick="changePage({{ $i }})" style="cursor: pointer;">
+                                                            <a class="page-link">{{ $i }}</a>
+                                                        </li>
+                                                      @endfor
+                                                      <li @if ($page == $comments->lastPage()) class="page-item disabled" @else class="page-item" @endif>
+                                                        <a class="page-link" onclick="changePage({{ $page+1 }})" style="cursor: pointer;">Sau</a>
+                                                      </li>
+                                                    </ul>
+                                                </nav>
+                                            </div> --}}
         
                                         </div>
         
@@ -65,21 +112,24 @@
                                     .page-link:hover {
                                         color: #252b3b !important;
                                     }
-                                    td.content{
+                                    td.name{
                                         max-width: 300px;
                                         white-space: normal;
                                     }
-                                    td.user{
+                                    td.email{
                                         max-width: 100px;
                                         white-space: normal;
                                     }
-                                    td.title{
+                                    td.is_admin{
                                         max-width: 200px;
                                         white-space: normal;
                                     }
+                                    #changeIcon:hover{
+                                        color: #117fe4 !important;
+                                    }
                                     </style>
-                                    <script>
-                                    //update comment
+                                    {{-- <script>
+                                    //delete product
                                     function updateStatusComment(commentId, status, page){
                                         $.ajax({
                                             url: "/admin/comment",
@@ -103,7 +153,7 @@
                                         });
                                     }
                                     
-                                    </script>
+                                    </script> --}}
 
                                 </div>
                             </div> <!-- end col -->
@@ -112,4 +162,4 @@
                     </div> <!-- container-fluid -->
                 </div>
                 <!-- End Page-content -->
-@endsection                
+@endsection        

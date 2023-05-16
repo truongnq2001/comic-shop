@@ -12,7 +12,8 @@
                         <div class="title-left">
                             <h3>Thông tin khách hàng</h3>
                         </div>
-                        <form class="needs-validation" novalidate>
+                        <form action="{{ route('cart.checkout.store') }}" method="POST">
+                            @csrf
                             {{-- <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="firstName">First name *</label>
@@ -28,25 +29,28 @@
                             <div class="mb-3">
                                 <label for="username">Tên</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="username" placeholder="" value="{{ Auth::user()->name }}">
+                                    <input type="text" name="name" class="form-control" id="username" placeholder="" value="{{ Auth::user()->name }}" required>
                                     <div class="invalid-feedback" style="width: 100%;"> Your username is required. </div>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="" value="{{ Auth::user()->email }}" disabled>
-                                <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
+                                <input type="email" name="email" class="form-control" id="email" placeholder="" value="{{ Auth::user()->email }}" disabled>
+                                <div class="invalid-feedback"> </div>
                             </div>
                             <div class="mb-3">
                                 <label for="phonenumber">Số điện thoại *</label>
-                                <input type="text" class="form-control" id="phonenumber" placeholder="" required>
-                                <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
+                                <input type="text" name="phonenumber" class="form-control" id="phonenumber" placeholder="" required>
+                                <div class="invalid-feedback"> Vui lòng nhập số điện thoại </div>
+                                <span id="invalidPhoneNumber" style="color: red;" hidden>Vui lòng nhập số điện thoại</span>
                             </div>
                             <div class="mb-3">
                                 <label for="address">Địa chỉ chi tiết *</label>
-                                <input type="text" class="form-control" id="address" placeholder="" required>
-                                <div class="invalid-feedback"> Please enter your shipping address. </div>
+                                <input type="text" name="address" class="form-control" id="address" placeholder="" required>
+                                <div class="invalid-feedback"> Vui lòng nhập địa chỉ chi tiết </div>
+                                <span id="invalidAddressDetail" style="color: red;" hidden>Vui lòng nhập địa chỉ chi tiết</span>
                             </div>
+                            
                             <div class="row">
                                 {{-- <div class="col-md-5 mb-3">
                                     <label for="country">Tỉnh/Thành phố *</label>
@@ -58,23 +62,24 @@
                                 </div> --}}
                                 <div class="col-md-4 mb-3">
                                     <label>Tỉnh/Thành phố *</label>
-                                    <select class="form-select form-select-sm mb-3 selectBox" id="city" aria-label=".form-select-sm" required>
+                                    <select class="form-select form-select-sm mb-3 selectBox" name="city" id="city" aria-label=".form-select-sm" required>
                                     <option value="" selected>Chọn Tỉnh Thành</option>           
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label>Quận/Huyện *</label>
-                                    <select class="form-select form-select-sm mb-3 selectBox" id="district" aria-label=".form-select-sm" required>
+                                    <select class="form-select form-select-sm mb-3 selectBox" name="district" id="district" aria-label=".form-select-sm" required>
                                     <option value="" selected>Chọn Quận Huyện</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label>Phường/Xã *</label>
-                                    <select class="form-select form-select-sm selectBox" id="ward" aria-label=".form-select-sm" required>
+                                    <select class="form-select form-select-sm selectBox" name="ward" id="ward" aria-label=".form-select-sm" required>
                                     <option value="" selected>Chọn Phường Xã</option>
                                     </select>
                                 </div>
                             </div>
+                            <span id="invalidAddress" style="color: red;" hidden>Vui lòng nhập địa chỉ</span>
                             <style>
                             .selectBox{
                                 min-height: 40px;
@@ -88,7 +93,7 @@
                             <div class="title"> <span>Hình thức thanh toán</span> </div>
                             <div class="d-block my-3">
                                 <div class="custom-control custom-radio">
-                                    <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                                    <input id="credit" name="paymentMethod" value="COD" type="radio" class="custom-control-input" checked required>
                                     <label class="custom-control-label" for="credit">Thanh toán khi nhận hàng</label>
                                 </div>
                             </div>
@@ -107,7 +112,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr class="mb-1"> </form>
+                            <hr class="mb-1"> 
                     </div>
                 </div>
                 <div class="col-sm-6 col-lg-6 mb-3">
@@ -119,7 +124,7 @@
                                 </div>
                                 <div class="mb-4">
                                     <div class="custom-control custom-radio">
-                                        <input id="shippingOption1" name="shipping-option" class="custom-control-input" checked="checked" type="radio">
+                                        <input id="shippingOption1" name="shipping" value="freeship" class="custom-control-input" checked="checked" type="radio">
                                         <label class="custom-control-label" for="shippingOption1">Giao hàng chuẩn</label> <span class="float-right font-weight-bold">Miễn phí</span> </div>
                                     <div class="ml-4 mb-2 small">(2-4 ngày)</div>
                                     {{-- <div class="custom-control custom-radio">
@@ -139,6 +144,7 @@
                                 </div>
                                 <?php
                                 $totalMoney = 0;
+                                $arrProduct = '';
                                 ?>
                                 <div class="rounded p-2 bg-light">
                                     @if (session()->has('cart'))
@@ -150,20 +156,12 @@
                                         </div>
                                         <?php
                                         $totalMoney += $item['product']->price*$item['quantity'];
+                                        $arrProduct = $arrProduct.$item['product']->id.' ';
                                         ?>
                                         @endforeach
                                     @endif
-                                    {{-- <div class="media mb-2 border-bottom">
-                                        <div class="media-body"> <a href="detail.html"> Lorem ipsum dolor sit amet</a>
-                                            <div class="small text-muted">Price: $60.00 <span class="mx-2">|</span> Qty: 1 <span class="mx-2">|</span> Subtotal: $60.00</div>
-                                        </div>
-                                    </div>
-                                    <div class="media mb-2">
-                                        <div class="media-body"> <a href="detail.html"> Lorem ipsum dolor sit amet</a>
-                                            <div class="small text-muted">Price: $40.00 <span class="mx-2">|</span> Qty: 1 <span class="mx-2">|</span> Subtotal: $40.00</div>
-                                        </div>
-                                    </div> --}}
                                 </div>
+                                <input type="text" name="arrProduct" value="{{$arrProduct}}" hidden>
                             </div>
                         </div>
                         <div class="col-md-12 col-lg-12">
@@ -189,11 +187,12 @@
                                 <div class="d-flex gr-total">
                                     <h5>Tổng tiền</h5>
                                     <div class="ml-auto h5"> {{ number_format($totalMoney, 0, ',', ',') }} VNĐ </div>
+                                    <input type="text" name="totalMoney" value="{{$totalMoney}}" hidden>
                                 </div>
                                 <hr> </div>
                         </div>
                         <div class="col-12 d-flex shopping-box"> 
-                            <button class="ml-auto btn hvr-hover" id="btnOrder" data-toggle="modal" data-target="#exampleModalCenter" style="color: white; font-size: 19px;">Đặt hàng</button>
+                            <button class="ml-auto btn hvr-hover" onclick="validateForm()" type="button" id="btnOrder" data-toggle="modal" style="color: white; font-size: 19px;">Đặt hàng</button>
                             <style>
                             #btnOrder:focus{
                                 box-shadow: none;
@@ -205,13 +204,14 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                <h3 class="modal-title" id="exampleModalLongTitle">Đặt hàng thành công</h3>
+                                <h3 class="modal-title" id="exampleModalLongTitle">Comic Shop</h3>
                                 </div>
                                 <div class="modal-body">
-                                Đơn hàng sẽ được giao đến bạn trong 2-4 ngày nữa
+                                Bạn có đồng ý đặt hàng không?
                                 </div>
                                 <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" id="closeModal" data-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn btn-secondary" id="closeModal" data-dismiss="modal" aria-label="Close">Không</button>
+                                <button type="submit" class="btn btn-secondary" id="closeModal" >Đồng ý</button>
                                 <style>
                                 #closeModal{
                                     background: black;
@@ -230,13 +230,40 @@
                             </div>
                             </div>
                         </div>
-
+                        </form>
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
+    <script>
+    function validateForm(){
+        let check = 0;
+        if ($('#phonenumber').val() === '') {
+            $('#invalidPhoneNumber').removeAttr("hidden");
+        }else{
+            $('#invalidPhoneNumber').attr("hidden", true);
+            check++;
+        }
+        if ($('#address').val() === '') {
+            $('#invalidAddressDetail').removeAttr("hidden");
+        }else{
+            $('#invalidAddressDetail').attr("hidden", true);
+            check++;
+        }
+        if ($('#city').val() !== '' && $('#district').val() !== '' && $('#ward').val() !== '') {
+            $('#invalidAddress').attr("hidden", true);
+            check++;
+        } else{
+            $('#invalidAddress').removeAttr("hidden");
+        }
+
+        if (check == 3) {
+            $('#btnOrder').attr('data-target', '#exampleModalCenter');
+        }
+    }
+    </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
@@ -244,9 +271,9 @@
     var districts = document.getElementById("district");
     var wards = document.getElementById("ward");
     var Parameter = {
-    url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json", 
-    method: "GET", 
-    responseType: "application/json", 
+        url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json", 
+        method: "GET", 
+        responseType: "application/json", 
     };
     var promise = axios(Parameter);
     promise.then(function (result) {
@@ -255,27 +282,27 @@
 
     function renderCity(data) {
     for (const x of data) {
-        citis.options[citis.options.length] = new Option(x.Name, x.Id);
+        citis.options[citis.options.length] = new Option(x.Name, x.Name);
     }
     citis.onchange = function () {
         district.length = 1;
         ward.length = 1;
         if(this.value != ""){
-        const result = data.filter(n => n.Id === this.value);
+        const result = data.filter(n => n.Name === this.value);
 
         for (const k of result[0].Districts) {
-            district.options[district.options.length] = new Option(k.Name, k.Id);
+            district.options[district.options.length] = new Option(k.Name, k.Name);
         }
         }
     };
     district.onchange = function () {
         ward.length = 1;
-        const dataCity = data.filter((n) => n.Id === citis.value);
+        const dataCity = data.filter((n) => n.Name === citis.value);
         if (this.value != "") {
-        const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+        const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
 
         for (const w of dataWards) {
-            wards.options[wards.options.length] = new Option(w.Name, w.Id);
+            wards.options[wards.options.length] = new Option(w.Name, w.Name);
         }
         }
     };

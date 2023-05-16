@@ -30,7 +30,6 @@ class ProductController extends Controller
                             ->orderBy('created_at', 'desc')
                             ->paginate(8, ['*'], 'page', $request->page),
             'page' => $request->page,
-
             ])->render();
         
         return Response::json([

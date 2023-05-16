@@ -66,7 +66,7 @@
 	</div>
 
     <!-- Start Products  -->
-    <div class="products-box">
+    <div class="products-box" style="padding: 40px 0px 20px 0px !important;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -116,56 +116,66 @@
                             <a href="{{route('product', ['id' => $item->id]) }}"><h4 style="text-transform: uppercase;"> {{ $item->title }}</h4></a>
                             <h5>{{ number_format($item->price, 0, ',', ',')}} VNĐ</h5> 
                         </div>
-                        <script>
-                        function addCart(productId){
-                            $.ajax({
-                                url: "/cart/add",
-                                type: "POST",
-                                data: {
-                                    "_token": "{{ csrf_token() }}",
-                                    "productId": productId,
-                                    "quantity": 1,
-                                },
-                                success: function(response){
-                                    if(response.status === "success"){
-                                        // alert(response.message);
-                                        var sessionArray = response.session;
-                                        var cart = '';
-                                        var totalMoney = 0;
-                                        for (var i = 0; i < sessionArray.length; i++) {
-                                            cart += `<li>
-                                                        <a href="#" style="height: 70px;" class="photo">
-                                                            <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
-                                                            </a>
-                                                        <div style="display: table;">
-                                                            <h6>
-                                                                <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
-                                                                </h6>
-                                                            <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
-                                                                <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
-                                                                    <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
-                                                                </a>
-                                                            </p>
-                                                        </div>
-                                                    </li>`;
-                                             totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
-                                        }
-                                        $('#cartBox').html(cart);
-                                        $('#cartBox').append(`<li class="total">
-                                                                <a href="/cart" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
-                                                                <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
-                                                            </li>`);
-                                        $('#totalCart').html(sessionArray.length);
-                                    }
-                                },
-                                error: function(response){
-                                    if (response.status === 'error') {
-                                        alert(response.message)
-                                    }
-                                },                            
-                            });
-                        }   
-                        </script>
+                       
+                    </div>
+                </div> 
+                @endforeach
+
+            </div>
+        </div>
+    </div>
+
+    <div class="products-box" style="padding: 20px 0px 70px 0px !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="title-all text-center">
+                        <h1>THẦN ĐỒNG ĐẤT VIỆT</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    {{-- <div class="special-menu text-center">
+                        <div class="button-group filter-button-group">
+                            <button class="active" data-filter="*">Tất cả</button>
+                            <button data-filter=".top-featured">Khuyến mại</button>
+                            <button data-filter=".best-seller">Bán chạy nhất</button>
+                        </div>
+                    </div> --}}
+                </div>
+            </div>
+
+            <div class="row special-list">
+                @foreach ($tddv as $item)
+                <div class="col-lg-3 col-md-6 col-sm-6 col-6 special-grid best-seller">
+                    <div class="products-single fix">
+                        <div class="box-img-hover">
+                            <div class="type-lb">
+                                <p class="sale">New</p>
+                            </div>
+                            <img src="{{ $item->image }}" class="img-fluid imgProduct" alt="Image">
+                            <div class="mask-icon">
+                                <ul>
+                                    <li>
+                                        <a href="{{ route('product', ['id' => $item->id]) }}" data-toggle="tooltip" data-placement="right" title="Chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Thêm vào yêu thích"><i class="far fa-heart"></i></a></li>
+                                </ul>
+                                @auth
+                                    <a class="cart" onclick="addCart({{ $item->id }})" style="cursor: pointer;">Thêm vào giỏ hàng</a>
+                                @else
+                                    <a class="cart" onclick="alert('Vui lòng đăng nhập để mua hàng!')" style="cursor: pointer;">Thêm vào giỏ hàng</a>
+                                @endauth
+                            </div>
+                        </div>
+                        <div class="why-text">
+                            <a href="{{route('product', ['id' => $item->id]) }}"><h4 style="text-transform: uppercase;"> {{ $item->title }}</h4></a>
+                            <h5>{{ number_format($item->price, 0, ',', ',')}} VNĐ</h5> 
+                        </div>
+                       
                     </div>
                 </div> 
                 @endforeach
@@ -180,10 +190,60 @@
         object-fit: cover;
     }  
     </style>
+     <script>
+        function addCart(productId){
+            $.ajax({
+                url: "/cart/add",
+                type: "POST",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "productId": productId,
+                    "quantity": 1,
+                },
+                success: function(response){
+                    if(response.status === "success"){
+                        // alert(response.message);
+                        var sessionArray = response.session;
+                        var cart = '';
+                        var totalMoney = 0;
+                        for (var i = 0; i < sessionArray.length; i++) {
+                            cart += `<li>
+                                        <a href="#" style="height: 70px;" class="photo">
+                                            <img src="` + sessionArray[i]['product'].image + `" style="object-fit: cover; height: 70px;" class="cart-thumb" alt="" />
+                                            </a>
+                                        <div style="display: table;">
+                                            <h6>
+                                                <a href="/product/` + sessionArray[i]['product'].id + `">` + sessionArray[i]['product'].title + `</a>
+                                                </h6>
+                                            <p>` + sessionArray[i]['quantity'] + `x <span class="price">` + sessionArray[i]['product'].price + ` VNĐ</span>
+                                                <a style="cursor: pointer" id="deleteCart" onclick="deleteCart(`+ sessionArray[i]['product'].id +`)">
+                                                    <i class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </li>`;
+                             totalMoney += sessionArray[i]['product'].price*sessionArray[i]['quantity'];
+                        }
+                        $('#cartBox').html(cart);
+                        $('#cartBox').append(`<li class="total">
+                                                <a href="/cart" class="btn btn-default hvr-hover btn-cart">CHI TIẾT</a>
+                                                <span class="float-right"><strong>Tổng</strong>: `+ totalMoney +` VNĐ</span>
+                                            </li>`);
+                        $('#totalCart').html(sessionArray.length);
+                    }
+                },
+                error: function(response){
+                    if (response.status === 'error') {
+                        alert(response.message)
+                    }
+                },                            
+            });
+        }   
+        </script>
     <!-- End Products  -->
 
     <!-- Start Blog  -->
-    <div class="latest-blog">
+    {{-- <div class="latest-blog">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -250,7 +310,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- End Blog  -->
 
 

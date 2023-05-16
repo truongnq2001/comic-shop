@@ -438,7 +438,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ asset('admin/category') }}" class=" waves-effect">
+                    <a href="{{ route('admin.user.show') }}" class=" waves-effect">
                         <i class="ri-user-3-line"></i>
                         <span>Người dùng</span>
                     </a>
