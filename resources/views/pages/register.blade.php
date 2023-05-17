@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Register</title>
+	<title>Đăng kí - Comic Shop</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -35,13 +35,13 @@
 
 				<form class="login100-form validate-form" action="{{ route('register') }}" method="post">
 					<span class="login100-form-title">
-						COMIC SHOP Register
+						COMIC SHOP 
 					</span>
 
                     @csrf
 
                     <div class="wrap-input100 validate-input @error('name') field-input @enderror">
-						<input class="input100" type="text" name="name" placeholder="Name">
+						<input class="input100" type="text" name="name" placeholder="Tên">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-user" aria-hidden="true"></i>
@@ -63,7 +63,7 @@
                     @enderror
 
 					<div class="wrap-input100 validate-input @error('password') field-input @enderror" data-validate = "Password is required">
-						<input class="input100" type="password" name="password" placeholder="Password">
+						<input class="input100" type="password" name="password" placeholder="Mật khẩu">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-lock" aria-hidden="true"></i>
@@ -74,7 +74,7 @@
                     @enderror
 
                     <div class="wrap-input100 validate-input" data-validate = "Password is required">
-						<input class="input100" type="password" name="password_confirmation" placeholder="Confirm Password">
+						<input class="input100" type="password" name="password_confirmation" placeholder="Nhập lại mật khẩu">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-check-square" aria-hidden="true"></i>
@@ -94,13 +94,13 @@
 					
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn">
-							Register
+							Đăng kí
 						</button>
 					</div>
 
 					<div class="text-center p-t-136">
 						<a class="txt2" href="{{ route('login') }}">
-                            Already have an account
+                            Đã có tài khoản
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
 						</a>
 					</div>
@@ -109,7 +109,17 @@
 		</div>
 	</div>
 	
-	
+	<style>
+		.txt2 {
+			font-family: sans-serif;
+			font-size: 14px;
+			font-weight: bold !important;
+		}
+		.input100{
+			font-family: sans-serif;
+    		font-size: 14px;
+		}
+		</style>
 
 	
 <!--===============================================================================================-->	

@@ -63,7 +63,7 @@
                                 <button class="btn btn-primary btn-plus changeQuantity" id="plusQuantity" onclick="plus({{ $product->id }})" style="background: #b0b435; border-radius: 0px; border: none;">
                                     <i class="fa fa-plus"></i>
                                 </button>
-                            </div>
+                            </div> 
                             <style>
                             button.changeQuantity:focus{
                                 box-shadow: none;

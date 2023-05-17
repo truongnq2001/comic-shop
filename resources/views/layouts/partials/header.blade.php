@@ -5,17 +5,17 @@
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 
                 <div class="right-phone-box">
-                    <p>Hotline : <a href="#"> +84 123 456 789</a></p>
+                    <p>Hotline : <a href=""> +84 123 456 789</a></p>
                 </div>
                 <div class="our-link">
                     <ul>
                         @auth
-                            <li><a href="#" style="text-transform: none !important;"><i class="fa fa-user s_color"></i> {{ Auth::user()->name }}</a></li>
+                            <li><a href="" style="text-transform: none !important;"><i class="fa fa-user s_color"></i> {{ Auth::user()->name }}</a></li>
                         @else
-                            <li><a href="#"><i class="fa fa-user s_color"></i> Tài khoản</a></li>
+                            <li><a href=""><i class="fa fa-user s_color"></i> Tài khoản</a></li>
                         @endauth
-                        <li><a href="#"><i class="fas fa-location-arrow"></i> Vị trí của chúng tôi</a></li>
-                        <li><a href="#"><i class="fas fa-headset"></i> Liên hệ</a></li>
+                        <li><a href="{{ route('contactus') }}"><i class="fas fa-location-arrow"></i> Vị trí của chúng tôi</a></li>
+                        <li><a href="{{ route('contactus') }}"><i class="fas fa-headset"></i> Liên hệ</a></li>
                     </ul>
                 </div>
             </div>
@@ -89,8 +89,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-menu">
                 <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
-                    <li class="nav-item active"><a class="nav-link" href="index.html">Trang chủ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.html">Về Chúng tôi</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="{{ route('home') }}">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('contactus') }}">Về Chúng tôi</a></li>
                     <li class="dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Thể loại <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                         <ul class="dropdown-menu">
@@ -115,9 +115,9 @@
                         </ul>
                     </li>
                     @auth
-                    <li class="nav-item"><a class="nav-link" href="">Đơn hàng</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('order.show') }}">Đơn hàng</a></li>
                     @else
-                    <li class="nav-item"><a class="nav-link" href="contact-us.html">Liên hệ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('contactus') }}">Liên hệ</a></li>
                     @endauth
                 </ul>
             </div>

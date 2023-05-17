@@ -40,8 +40,8 @@
                         <div class="card-body">
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <p class="text-truncate font-size-14 mb-2">Số lượng đặt hàng</p>
-                                    <h4 class="mb-2">938</h4>
+                                    <p class="text-truncate font-size-14 mb-2">Số lượng đơn hàng</p>
+                                    <h4 class="mb-2">{{ $orderTotal }}</h4>
                                     <p class="text-muted mb-0"></p>
                                 </div>
                                 <div class="avatar-sm">

@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [PagesController::class, 'home'])->name('home');
+Route::get('/contact-us', [PagesController::class, 'contactUs'])->name('contactus');
 Route::get('/product/{id}', [PagesController::class, 'product'])->name('product');
 Route::get('/filter', [PagesController::class, 'filter'])->name('product.filter')->middleware('checkParameter');
 
@@ -37,8 +39,9 @@ Route::put('/cart/update', [CartController::class, 'updateCart'])->name('cart.up
 Route::delete('/cart/delete', [CartController::class, 'deleteCart'])->name('cart.delete')->middleware('auth');
 Route::get('/checkout', [CartController::class, 'showCheckout'])->name('cart.checkout')->middleware('cartNotEmpty');
 
-Route::post('/checkout', [CartController::class, 'storeCheckout'])->name('cart.checkout.store')->middleware('cartNotEmpty');
-Route::get('/order', [CartController::class, 'showOrder'])->name('order.show');
+//Order
+Route::post('/checkout', [OrderController::class, 'storeCheckout'])->name('order.checkout.store')->middleware('cartNotEmpty');
+Route::get('/order', [OrderController::class, 'show'])->name('order.show')->middleware('auth');
 
 //Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
@@ -71,6 +74,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
         Route::post('/create', [CategoryController::class, 'store'])->name('admin.category.store');
         Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
     });
+    //order
+    Route::get('/order', [OrderController::class, 'showOrderAdmin'])->name('admin.order.show');
     //user
     Route::get('/user', [UserController::class, 'index'])->name('admin.user.show');
     //comment

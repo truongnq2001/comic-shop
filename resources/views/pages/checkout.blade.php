@@ -12,7 +12,7 @@
                         <div class="title-left">
                             <h3>Thông tin khách hàng</h3>
                         </div>
-                        <form action="{{ route('cart.checkout.store') }}" method="POST">
+                        <form action="{{ route('order.checkout.store') }}" method="POST">
                             @csrf
                             {{-- <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -29,7 +29,8 @@
                             <div class="mb-3">
                                 <label for="username">Tên</label>
                                 <div class="input-group">
-                                    <input type="text" name="name" class="form-control" id="username" placeholder="" value="{{ Auth::user()->name }}" required>
+                                    <input type="text" name="name" class="form-control" id="username" placeholder="" value="{{ Auth::user()->name }}" disabled>
+                                    <input type="text" name="user_id" class="form-control" placeholder="" value="{{ Auth::user()->id }}" hidden>
                                     <div class="invalid-feedback" style="width: 100%;"> Your username is required. </div>
                                 </div>
                             </div>
@@ -156,7 +157,7 @@
                                         </div>
                                         <?php
                                         $totalMoney += $item['product']->price*$item['quantity'];
-                                        $arrProduct = $arrProduct.$item['product']->id.' ';
+                                        $arrProduct = $arrProduct.$item['product']->id.' '.$item['quantity'].' ';
                                         ?>
                                         @endforeach
                                     @endif
@@ -187,7 +188,7 @@
                                 <div class="d-flex gr-total">
                                     <h5>Tổng tiền</h5>
                                     <div class="ml-auto h5"> {{ number_format($totalMoney, 0, ',', ',') }} VNĐ </div>
-                                    <input type="text" name="totalMoney" value="{{$totalMoney}}" hidden>
+                                    <input type="text" name="total_money" value="{{$totalMoney}}" hidden>
                                 </div>
                                 <hr> </div>
                         </div>

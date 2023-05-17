@@ -17,6 +17,11 @@ class PagesController extends Controller
         ]);
     }
 
+    public function contactUs()
+    {
+        return view('pages.contact-us');
+    }
+
     public function cart()
     {
         return view('pages/cart');

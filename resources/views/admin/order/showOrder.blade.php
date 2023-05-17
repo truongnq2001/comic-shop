@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0">Danh sách người dùng</h4>
+                                    <h4 class="mb-sm-0">Danh sách đơn hàng</h4>
                                 </div>
                             </div>
                         </div>
@@ -31,19 +31,29 @@
                                                     <th>STT</th>
                                                     <th data-priority="1">Tên</th>
                                                     <th data-priority="3">Email</th>
-                                                    <th data-priority="1">Quyền</th>
+                                                    <th data-priority="1">Số điện thoại</th>
+                                                    <th data-priority="1">Tỉnh/Thành phố</th>
+                                                    <th data-priority="1">Huyện/Quận</th>
+                                                    <th data-priority="1">Xã/Phường</th>
+                                                    <th data-priority="1">Địa chỉ chi tiết</th>
+                                                    <th data-priority="1">Tổng tiền</th>
                                                     <th data-priority="6">Ngày cập nhật</th>
                                                     <th data-priority="6">Ngày tạo</th>
                                                     {{-- <th data-priority="6">Hiển thị</th> --}}
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($users as $key => $item)
+                                                    @foreach (collect($orders)->reverse() as $key => $item)
                                                     <tr>
-                                                        <td>{{ $key + 1 }}</td>
-                                                        <td class="name">{{ $item->name }}</td>
-                                                        <td class="email">{{ $item->email }}</td>
-                                                        <td class="is_admin">@if ($item->is_admin == 1) Quản trị viên @else Người dùng @endif</td>
+                                                        <td>{{ count($orders) - $key }}</td>
+                                                        <td class="">{{ $item->user->name }}</td>
+                                                        <td class="">{{ $item->user->email }}</td>
+                                                        <td class="">{{ $item->phone_number }}</td>
+                                                        <td class="">{{ $item->city }}</td>
+                                                        <td class="">{{ $item->district }}</td>
+                                                        <td class="">{{ $item->ward }}</td>
+                                                        <td class="">{{ $item->address_detail }}</td>
+                                                        <td class="">{{ number_format($item->total_money, 0, ',', ',')}} VNĐ</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->updated_at)->format('H:i:s d-m-Y') }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i:s d-m-Y') }}</td>
                                                         <td>
@@ -112,7 +122,7 @@
                                     .page-link:hover {
                                         color: #252b3b !important;
                                     }
-                                    td.name{
+                                    /* td.name{
                                         max-width: 300px;
                                         white-space: normal;
                                     }
@@ -123,7 +133,7 @@
                                     td.is_admin{
                                         max-width: 200px;
                                         white-space: normal;
-                                    }
+                                    } */
                                     #changeIcon:hover{
                                         color: #117fe4 !important;
                                     }
@@ -162,4 +172,4 @@
                     </div> <!-- container-fluid -->
                 </div>
                 <!-- End Page-content -->
-@endsection        
+@endsection   

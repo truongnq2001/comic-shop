@@ -431,7 +431,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ asset('admin/category') }}" class=" waves-effect">
+                    <a href="{{ route('admin.order.show') }}" class=" waves-effect">
                         <i class="ri-shopping-cart-2-line"></i>
                         <span>Đơn hàng</span>
                     </a>

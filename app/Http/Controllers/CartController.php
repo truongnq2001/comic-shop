@@ -14,22 +14,10 @@ class CartController extends Controller
         return view('pages/cart');
     }
 
-    //show order
-    public function showOrder()
-    {
-        return view('pages/order');
-    }
-
     //show checkout
     public function showCheckout()
     {
         return view('pages/checkout');
-    }
-
-    //store checkout
-    public function storeCheckout(Request $request)
-    {
-        dd($request->all());
     }
 
     //add cart
