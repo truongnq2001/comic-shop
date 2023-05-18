@@ -183,6 +183,65 @@
             </div>
         </div>
     </div>
+
+    <div class="products-box" style="padding: 20px 0px 70px 0px !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="title-all text-center">
+                        <h1>DORAEMON</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    {{-- <div class="special-menu text-center">
+                        <div class="button-group filter-button-group">
+                            <button class="active" data-filter="*">Tất cả</button>
+                            <button data-filter=".top-featured">Khuyến mại</button>
+                            <button data-filter=".best-seller">Bán chạy nhất</button>
+                        </div>
+                    </div> --}}
+                </div>
+            </div>
+
+            <div class="row special-list">
+                @foreach ($doraemon as $item)
+                <div class="col-lg-3 col-md-6 col-sm-6 col-6 special-grid best-seller">
+                    <div class="products-single fix">
+                        <div class="box-img-hover">
+                            <div class="type-lb">
+                                <p class="sale">New</p>
+                            </div>
+                            <img src="{{ $item->image }}" class="img-fluid imgProduct" alt="Image">
+                            <div class="mask-icon">
+                                <ul>
+                                    <li>
+                                        <a href="{{ route('product', ['id' => $item->id]) }}" data-toggle="tooltip" data-placement="right" title="Chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Thêm vào yêu thích"><i class="far fa-heart"></i></a></li>
+                                </ul>
+                                @auth
+                                    <a class="cart" onclick="addCart({{ $item->id }})" style="cursor: pointer;">Thêm vào giỏ hàng</a>
+                                @else
+                                    <a class="cart" onclick="alert('Vui lòng đăng nhập để mua hàng!')" style="cursor: pointer;">Thêm vào giỏ hàng</a>
+                                @endauth
+                            </div>
+                        </div>
+                        <div class="why-text">
+                            <a href="{{route('product', ['id' => $item->id]) }}"><h4 style="text-transform: uppercase;"> {{ $item->title }}</h4></a>
+                            <h5>{{ number_format($item->price, 0, ',', ',')}} VNĐ</h5> 
+                        </div>
+                       
+                    </div>
+                </div> 
+                @endforeach
+
+            </div>
+        </div>
+    </div>
     <style>
     .imgProduct{
         height: 355px; 

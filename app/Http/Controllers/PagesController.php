@@ -14,6 +14,7 @@ class PagesController extends Controller
         return view('pages/home',[
             'productNew' => Product::orderBy('created_at', 'desc')->take(8)->get(),
             'tddv' => Product::where('category_id', '=', '63')->orderBy('created_at', 'desc')->take(8)->get(),
+            'doraemon' => Product::where('category_id', '=', '65')->orderBy('created_at', 'desc')->take(8)->get(),
         ]);
     }
 

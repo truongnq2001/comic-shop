@@ -151,7 +151,7 @@
                                     @if (session()->has('cart'))
                                         @foreach (session('cart') as $item)
                                         <div class="media mb-2 border-bottom">
-                                            <div class="media-body"> <a href="detail.html" style="font-size: 15px;"> {{ $item['product']->title }}</a>
+                                            <div class="media-body"> <a href="{{ route('product', ['id' => $item['product']->id ]) }}" style="font-size: 15px;"> {{ $item['product']->title }}</a>
                                                 <div class="small text-muted" style="font-size: 13px;">Đơn giá: {{ number_format($item['product']->price, 0, ',', ',') }} VNĐ<span class="mx-2">|</span> Số lượng: {{ $item['quantity'] }} <span class="mx-2">|</span> Tổng tiền: {{ number_format($item['product']->price*$item['quantity'], 0, ',', ',') }} VNĐ</div>
                                             </div>
                                         </div>

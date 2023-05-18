@@ -92,6 +92,68 @@
             </div><!-- end row -->
             <!-- end row -->
             <!-- end row -->
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title mb-4">Danh sách sản phẩm được mua nhiều nhất</h2>                           
+                                <table class="table table-centered mb-0 align-middle table-hover table-nowrap">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tên truyện</th>
+                                            <th style="text-align: center;">Số lượng bán</th>
+                                            <th>Tác giả</th>
+                                            <th>Thể loại</th>
+                                            <th>Đối tượng</th>
+                                            <th>Giá tiền</th>
+                                            
+                                        </tr>
+                                    </thead><!-- end thead -->
+                                    <tbody>
+                                        @foreach ($bestSellers as $index => $item)
+                                        <tr>
+                                            <td><h6 class="mb-0">{{ $index+1 }}</h6></td>
+                                            <td class="title">{{ $item->title }}</td>
+                                            <td class="" style="text-align: center; font-weight: bold;">{{ $item->total_num }}</td>
+                                            <td class="author">{{ $item->author }}</td>
+                                            <td class="category">{{ $item->category }}</td>
+                                            <td class="">{{ $item->age }}</td>
+                                            <td class="price">{{ number_format($item->price, 0, ',', ',')}} VNĐ</td>
+ 
+                                        </tr>
+                                        @endforeach
+                                        
+                                         <!-- end -->
+                                    </tbody><!-- end tbody -->
+                                    <style>
+                                    td.title{
+                                        max-width: 165px;
+                                        white-space: normal;
+                                    }
+                                    td.author{
+                                        max-width: 100px;
+                                        white-space: normal;
+                                    }
+                                    td.category{
+                                        max-width: 100px;
+                                        white-space: normal;
+                                    }
+                                    td.price{
+                                        max-width: 100px;
+                                        white-space: normal;
+                                    }
+                                    td.updated_at{
+                                        max-width: 100px;
+                                        white-space: normal;
+                                    }
+                                    </style>
+                                </table> <!-- end table -->
+                            
+                        </div><!-- end card -->
+                    </div><!-- end card -->
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-xl-8">
